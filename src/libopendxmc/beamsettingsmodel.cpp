@@ -330,6 +330,18 @@ void addTubeItems(LabelItem* tubeItem, std::shared_ptr<Beam> beam)
         addItem(tubeItem, "Tube Ag filtration [mm]", setter, getter);
     }
     {
+        auto setter = [=](double d) {
+            auto& dx = std::get<T>(*beam);
+            dx.addTubeFiltrationMaterial(4, d);
+        };
+        auto getter = [=]() -> double {
+            auto& dx = std::get<T>(*beam);
+            const auto& tube = dx.tube();
+            return tube.filtration(4);
+        };
+        addItem(tubeItem, "Tube Be filtration [mm]", setter, getter);
+    }
+    {
         auto getter = [=]() -> double {
             auto& dx = std::get<T>(*beam);
             return dx.tubeAlHalfValueLayer();

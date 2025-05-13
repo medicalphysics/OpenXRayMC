@@ -480,6 +480,7 @@ bool HDF5Wrapper::save(DXBeam& beam)
     saveAttribute<std::uint64_t>(beamgroup, "particles_per_exposure", beam.numberOfParticlesPerExposure());
     saveAttribute<double>(beamgroup, "tube_voltage", beam.tube().voltage());
     saveAttribute<double>(beamgroup, "tube_anode_angle", beam.tube().anodeAngleDeg());
+    saveAttribute<double>(beamgroup, "tube_Be_filtration", beam.tube().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtration", beam.tube().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtration", beam.tube().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtration", beam.tube().filtration(50));
@@ -507,6 +508,7 @@ bool HDF5Wrapper::save(CBCTBeam& beam)
     saveAttribute<std::uint64_t>(beamgroup, "particles_per_exposure", beam.numberOfParticlesPerExposure());
     saveAttribute<double>(beamgroup, "tube_voltage", beam.tube().voltage());
     saveAttribute<double>(beamgroup, "tube_anode_angle", beam.tube().anodeAngleDeg());
+    saveAttribute<double>(beamgroup, "tube_Be_filtration", beam.tube().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtration", beam.tube().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtration", beam.tube().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtration", beam.tube().filtration(50));
@@ -537,6 +539,7 @@ bool HDF5Wrapper::save(CTSequentialBeam& beam)
     saveAttribute<double>(beamgroup, "CTDIdiameter", beam.CTDIdiameter());
     saveAttribute<double>(beamgroup, "tube_voltage", beam.tube().voltage());
     saveAttribute<double>(beamgroup, "tube_anode_angle", beam.tube().anodeAngleDeg());
+    saveAttribute<double>(beamgroup, "tube_Be_filtration", beam.tube().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtration", beam.tube().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtration", beam.tube().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtration", beam.tube().filtration(50));
@@ -569,6 +572,7 @@ bool HDF5Wrapper::save(CTSpiralBeam& beam)
     saveAttribute<double>(beamgroup, "CTDIdiameter", beam.CTDIdiameter());
     saveAttribute<double>(beamgroup, "tube_voltage", beam.tube().voltage());
     saveAttribute<double>(beamgroup, "tube_anode_angle", beam.tube().anodeAngleDeg());
+    saveAttribute<double>(beamgroup, "tube_Be_filtration", beam.tube().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtration", beam.tube().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtration", beam.tube().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtration", beam.tube().filtration(50));
@@ -606,11 +610,13 @@ bool HDF5Wrapper::save(CTSpiralDualEnergyBeam& beam)
     saveAttribute<double>(beamgroup, "CTDIvol", beam.CTDIvol());
     saveAttribute<double>(beamgroup, "CTDIdiameter", beam.CTDIdiameter());
     saveAttribute<double>(beamgroup, "tube_voltageB", beam.tubeB().voltage());
+    saveAttribute<double>(beamgroup, "tube_Be_filtrationB", beam.tubeB().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtrationB", beam.tubeB().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtrationB", beam.tubeB().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtrationB", beam.tubeB().filtration(50));
     saveAttribute<double>(beamgroup, "tube_anode_angle", beam.tubeA().anodeAngleDeg());
     saveAttribute<double>(beamgroup, "tube_voltageA", beam.tubeA().voltage());
+    saveAttribute<double>(beamgroup, "tube_Be_filtrationA", beam.tubeA().filtration(4));
     saveAttribute<double>(beamgroup, "tube_Al_filtrationA", beam.tubeA().filtration(13));
     saveAttribute<double>(beamgroup, "tube_Cu_filtrationA", beam.tubeA().filtration(29));
     saveAttribute<double>(beamgroup, "tube_Sn_filtrationA", beam.tubeA().filtration(50));
@@ -676,6 +682,10 @@ std::shared_ptr<Beam> loadDXBeam(std::unique_ptr<H5::Group>& group)
     if (tube_anode_angle)
         dx.setTubeAnodeAngleDeg(tube_anode_angle.value()[0]);
 
+    auto tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtration");
+    if (tube_Be_filtration)
+        dx.addTubeFiltrationMaterial(4, tube_Be_filtration.value()[0]);
+
     auto tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtration");
     if (tube_Al_filtration)
         dx.addTubeFiltrationMaterial(13, tube_Al_filtration.value()[0]);
@@ -733,6 +743,10 @@ std::shared_ptr<Beam> loadCBCTBeam(std::unique_ptr<H5::Group>& group)
     auto tube_anode_angle = loadAttribute<double, 1>(group, "tube_anode_angle");
     if (tube_anode_angle)
         dx.setTubeAnodeAngleDeg(tube_anode_angle.value()[0]);
+
+    auto tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtration");
+    if (tube_Be_filtration)
+        dx.addTubeFiltrationMaterial(4, tube_Be_filtration.value()[0]);
 
     auto tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtration");
     if (tube_Al_filtration)
@@ -810,6 +824,10 @@ std::shared_ptr<Beam> loadCTSequentialBeam(std::unique_ptr<H5::Group>& group)
     if (tube_anode_angle)
         ct.setTubeAnodeAngleDeg(tube_anode_angle.value()[0]);
 
+    auto tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtration");
+    if (tube_Be_filtration)
+        ct.addTubeFiltrationMaterial(4, tube_Be_filtration.value()[0]);
+
     auto tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtration");
     if (tube_Al_filtration)
         ct.addTubeFiltrationMaterial(13, tube_Al_filtration.value()[0]);
@@ -881,6 +899,10 @@ std::shared_ptr<Beam> loadCTSpiralBeam(std::unique_ptr<H5::Group>& group)
     auto tube_anode_angle = loadAttribute<double, 1>(group, "tube_anode_angle");
     if (tube_anode_angle)
         ct.setTubeAnodeAngleDeg(tube_anode_angle.value()[0]);
+
+    auto tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtration");
+    if (tube_Be_filtration)
+        ct.addTubeFiltrationMaterial(4, tube_Be_filtration.value()[0]);
 
     auto tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtration");
     if (tube_Al_filtration)
@@ -983,6 +1005,10 @@ std::shared_ptr<Beam> loadCTSpiralDualEnergyBeam(std::unique_ptr<H5::Group>& gro
     if (tube_voltage)
         ct.setTubeAVoltage(tube_voltage.value()[0]);
 
+    auto tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtrationA");
+    if (tube_Be_filtration)
+        ct.addTubeAFiltrationMaterial(4, tube_Be_filtration.value()[0]);
+
     auto tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtrationA");
     if (tube_Al_filtration)
         ct.addTubeAFiltrationMaterial(13, tube_Al_filtration.value()[0]);
@@ -998,6 +1024,10 @@ std::shared_ptr<Beam> loadCTSpiralDualEnergyBeam(std::unique_ptr<H5::Group>& gro
     tube_voltage = loadAttribute<double, 1>(group, "tube_voltageB");
     if (tube_voltage)
         ct.setTubeBVoltage(tube_voltage.value()[0]);
+
+    tube_Be_filtration = loadAttribute<double, 1>(group, "tube_Be_filtrationB");
+    if (tube_Be_filtration)
+        ct.addTubeBFiltrationMaterial(4, tube_Be_filtration.value()[0]);
 
     tube_Al_filtration = loadAttribute<double, 1>(group, "tube_Al_filtrationB");
     if (tube_Al_filtration)
