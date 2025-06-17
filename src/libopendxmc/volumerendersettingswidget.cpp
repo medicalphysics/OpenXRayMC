@@ -119,6 +119,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     });
     layout->addLayout(inter_type.layout);
 
+    /*
     // Sample distance
     auto sample_dist = getSettingsWidget<QSlider>(tr("Sample distance"), this);
     sample_dist.widget->setValue(static_cast<int>(m_settings->mapper()->GetSampleDistance() * 100));
@@ -129,6 +130,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
         m_settings->render();
     });
     layout->addLayout(sample_dist.layout);
+    */
 
     // jittering
     auto jittering = getSettingsWidget<QCheckBox>(tr("Use jittering"), this);

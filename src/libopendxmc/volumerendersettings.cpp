@@ -39,7 +39,6 @@ VolumeRenderSettings::VolumeRenderSettings(
 
     // Follow new light settings
     m_renderer->SetLightFollowCamera(true);
-    m_renderer->GetRenderWindow()->GetInteractor()->SetLightFollowCamera(false);
 
     auto olut = opacityLut();
     olut->SetClamping(true);
