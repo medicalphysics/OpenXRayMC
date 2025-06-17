@@ -30,9 +30,15 @@ public:
     void setBlurRadius(const double*);
     void setOutputSpacing(const double*);
     void setUseOutputSpacing(bool);
+    void setUseImageThreshold(bool use);
+    void setImageThresholdMax(double threshold);
+    void setImageThresholdMin(double threshold);
 
 private:
     std::array<double, 3> m_outputSpacing = { 0, 0, 0 };
     std::array<double, 3> m_blurRadius = { 0, 0, 0 };
+    double m_imageThresholdMax = 2000;
+    double m_imageThresholdMin = -1024;
     bool m_useOutputSpacing = false;
+    bool m_useImageThreshold = false;
 };

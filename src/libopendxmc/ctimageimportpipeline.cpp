@@ -25,6 +25,7 @@ Copyright 2023 Erlend Andersen
 #include <vtkImageGaussianSmooth.h>
 #include <vtkImageResize.h>
 #include <vtkImageReslice.h>
+#include <vtkImageThreshold.h>
 #include <vtkIntArray.h>
 #include <vtkMatrix4x4.h>
 #include <vtkSmartPointer.h>
@@ -161,15 +162,34 @@ void CTImageImportPipeline::readImages(const QStringList& dicomPaths)
         dicomRescaler->SetOutputScalarType(VTK_DOUBLE);
         dicomRescaler->ReleaseDataFlagOn();
 
+        // Thresholding the image data
+
+        vtkSmartPointer<vtkImageThreshold> thresholdMin = vtkSmartPointer<vtkImageThreshold>::New();
+        thresholdMin->SetReplaceIn(m_useImageThreshold);
+        thresholdMin->SetInValue(m_imageThresholdMin);
+        thresholdMin->ThresholdByLower(m_imageThresholdMin);
+        thresholdMin->SetInputConnection(dicomRescaler->GetOutputPort());
+        thresholdMin->ReleaseDataFlagOn();
+
+        vtkSmartPointer<vtkImageThreshold> thresholdMax = vtkSmartPointer<vtkImageThreshold>::New();
+        thresholdMax->SetReplaceIn(m_useImageThreshold);
+        thresholdMax->SetInValue(m_imageThresholdMax);
+        thresholdMax->ThresholdByUpper(m_imageThresholdMax);
+        thresholdMax->SetInputConnection(thresholdMin->GetOutputPort());
+        thresholdMax->ReleaseDataFlagOn();
+
         // if images aquired with gantry tilt we correct it
         vtkSmartPointer<vtkDICOMCTRectifier> dicomRectifier = vtkSmartPointer<vtkDICOMCTRectifier>::New();
-        dicomRectifier->SetInputConnection(dicomRescaler->GetOutputPort());
         dicomRectifier->ReleaseDataFlagOn();
+        if (m_useImageThreshold) {
+            dicomRectifier->SetInputConnection(thresholdMax->GetOutputPort());
+        } else {
+            dicomRectifier->SetInputConnection(dicomRescaler->GetOutputPort());
+        }
 
         // If the images are an mpr, we align axis to world axis
         vtkSmartPointer<vtkImageReslice> reslicer = vtkSmartPointer<vtkImageReslice>::New();
         reslicer->SetInputConnection(dicomRectifier->GetOutputPort());
-        // reslicer->SetInterpolationModeToLinear();
         reslicer->SetInterpolationModeToCubic();
         reslicer->ReleaseDataFlagOn();
         reslicer->AutoCropOutputOn();
@@ -230,7 +250,7 @@ void CTImageImportPipeline::readImages(const QStringList& dicomPaths)
 
         image->setAecData(readExposureData(dicomReader));
     }
-    
+
     emit dataProcessingFinished(ProgressWorkType::Importing);
     emit imageDataChanged(image);
 }
@@ -250,4 +270,16 @@ void CTImageImportPipeline::setOutputSpacing(const double* d)
 {
     for (std::size_t i = 0; i < 3; ++i)
         m_outputSpacing[i] = d[i];
+}
+void CTImageImportPipeline::setUseImageThreshold(bool use)
+{
+    m_useImageThreshold = use;
+}
+void CTImageImportPipeline::setImageThresholdMax(double threshold)
+{
+    m_imageThresholdMax = threshold;
+}
+void CTImageImportPipeline::setImageThresholdMin(double threshold)
+{
+    m_imageThresholdMin = threshold;
 }

@@ -101,6 +101,9 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ctdicomimportwidget, &CTDicomImportWidget::blurRadiusChanged, ctimageimportpipeline, &CTImageImportPipeline::setBlurRadius);
     connect(ctdicomimportwidget, &CTDicomImportWidget::outputSpacingChanged, ctimageimportpipeline, &CTImageImportPipeline::setOutputSpacing);
     connect(ctdicomimportwidget, &CTDicomImportWidget::useOutputSpacingChanged, ctimageimportpipeline, &CTImageImportPipeline::setUseOutputSpacing);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::useImageThresholdChanged, ctimageimportpipeline, &CTImageImportPipeline::setUseImageThreshold);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::imageThresholdMaxChanged, ctimageimportpipeline, &CTImageImportPipeline::setImageThresholdMax);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::imageThresholdMinChanged, ctimageimportpipeline, &CTImageImportPipeline::setImageThresholdMin);
     connect(ctimageimportpipeline, &CTImageImportPipeline::imageDataChanged, slicerender, &RenderWidgetsCollection::updateImageData);
 
     // adding ct material segmentation pipeline

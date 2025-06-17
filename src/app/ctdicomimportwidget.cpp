@@ -128,6 +128,39 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     }
     outputSpacingBox->setLayout(outputSpacingLayoutButtons);
 
+    // image threshold selection
+    auto thresholdBox = new QGroupBox(tr("Clamp CT numbers"), this);
+    thresholdBox->setCheckable(true);
+    thresholdBox->setChecked(false);
+    connect(thresholdBox, &QGroupBox::toggled, [this](bool value) { emit useImageThresholdChanged(value); });
+    auto thresholdLayoutButtons = new QHBoxLayout;
+    auto thresholdMaxSpinBox = new QDoubleSpinBox(outputSpacingBox);
+    thresholdMaxSpinBox->setMinimum(300);
+    thresholdMaxSpinBox->setMaximum(10000);
+    thresholdMaxSpinBox->setSuffix(" HU");
+    thresholdMaxSpinBox->setValue(2000);
+    thresholdMaxSpinBox->setSingleStep(100);
+    thresholdMaxSpinBox->setDecimals(0);
+    connect(thresholdMaxSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [this](auto value) {
+        emit imageThresholdMaxChanged(value);
+    });
+    auto thresholdMinSpinBox = new QDoubleSpinBox(outputSpacingBox);
+    thresholdMinSpinBox->setMinimum(-10000);
+    thresholdMinSpinBox->setMaximum(-300);
+    thresholdMinSpinBox->setSuffix(" HU");
+    thresholdMinSpinBox->setValue(-1024);
+    thresholdMinSpinBox->setSingleStep(100);
+    thresholdMinSpinBox->setDecimals(0);
+    connect(thresholdMinSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [this](auto value) {
+        emit imageThresholdMinChanged(value);
+    });
+    thresholdLayoutButtons->addWidget(new QLabel(tr("Min: "), thresholdBox));
+    thresholdLayoutButtons->addWidget(thresholdMinSpinBox);
+    thresholdLayoutButtons->addStretch(0);
+    thresholdLayoutButtons->addWidget(new QLabel(tr("Max: "), thresholdBox));
+    thresholdLayoutButtons->addWidget(thresholdMaxSpinBox);
+    thresholdBox->setLayout(thresholdLayoutButtons);
+
 #ifdef USECTSEGMENTATOR
     connect(outputSegmentatorBox, &QGroupBox::toggled, [=, this](bool value) {
         outputSpacingBox->setChecked(value);
@@ -208,6 +241,7 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     mainlayout->addWidget(outputSegmentatorBox);
 #endif
     mainlayout->addWidget(outputSpacingBox);
+    mainlayout->addWidget(thresholdBox);
     mainlayout->addWidget(tubeBox);
     mainlayout->addWidget(seriesSelectorBox);
     mainlayout->addLayout(progressLayout);

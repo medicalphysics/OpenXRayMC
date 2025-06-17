@@ -78,7 +78,7 @@ void VolumeRenderSettings::setCurrentImageData(vtkSmartPointer<vtkImageData> dat
     m_currentImageData = data;
     if (m_currentImageData) {
         m_mapper->SetInputData(m_currentImageData);
-        m_currentImageData->GetScalarRange(m_currentImageDataScalarRange.data());
+        m_currentImageData->GetScalarRange(m_currentImageDataScalarRange.data());        
         updateColorLutFromNormalizedRange(false);
         updateGradientLutFromNormalizedRange(false);
         updateOpacityLutFromNormalizedRange(false);

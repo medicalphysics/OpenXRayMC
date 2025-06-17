@@ -48,6 +48,9 @@ signals:
     void aqusitionSnFiltrationChanged(double mm);
     void segmentationMaterialsChanged();
     void requestCancelSegmentation();
+    void useImageThresholdChanged(bool use);
+    void imageThresholdMaxChanged(double threshold);
+    void imageThresholdMinChanged(double threshold);
 
 private:
     void browseForFolder(void);
