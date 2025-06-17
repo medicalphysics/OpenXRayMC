@@ -147,6 +147,17 @@ ICRPPhantomImportWidget::ICRPPhantomImportWidget(QWidget* parent)
 
     const auto exeDirPath = QCoreApplication::applicationDirPath();
 
+    // remove arms
+    auto arm_box = new QGroupBox(tr("Remove arms"), this);
+    arm_box->setCheckable(true);
+    arm_box->setChecked(false);
+    connect(arm_box, &QGroupBox::toggled, this, &ICRPPhantomImportWidget::setRemoveArms);
+    auto arm_lay = new QVBoxLayout;
+    arm_box->setLayout(arm_lay);
+    auto arm_label = new QLabel(tr("Replace arms on phantoms with air."), arm_box);
+    arm_lay->addWidget(arm_label);
+    lay->addWidget(arm_box);
+
     // phantom selector
     auto p_box = new QGroupBox(tr("Select ICRP phantom to import"), this);
     auto p_lay = new QVBoxLayout;
@@ -176,14 +187,5 @@ ICRPPhantomImportWidget::ICRPPhantomImportWidget(QWidget* parent)
     });
     lay->addWidget(p_box);
 
-    auto arm_box = new QGroupBox(tr("Remove arms"), this);
-    arm_box->setCheckable(true);
-    arm_box->setChecked(false);
-    connect(arm_box, &QGroupBox::toggled, this, &ICRPPhantomImportWidget::setRemoveArms);
-    auto arm_lay = new QVBoxLayout;
-    arm_box->setLayout(arm_lay);
-    auto arm_label = new QLabel(tr("Replace arms on phantoms with air."), arm_box);
-    arm_lay->addWidget(arm_label);
-    lay->addWidget(arm_box);
     lay->addStretch(100);
 }
