@@ -79,6 +79,9 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
 
     // image blurfactor selection
     auto outputBlurBox = new QGroupBox(tr("Image smooth factor [XYZ]:"), this);
+    outputBlurBox->setCheckable(true);
+    outputBlurBox->setChecked(false);
+    connect(outputBlurBox, &QGroupBox::toggled, [this](bool value) { emit useBlurChanged(value); });
     auto outputBlurLayoutButtons = new QHBoxLayout;
     for (int i = 0; i < 3; i++) {
         auto spinBox = new QDoubleSpinBox(this);
@@ -236,12 +239,12 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
 
     // setting up layout
     mainlayout->addWidget(browseBox);
-    mainlayout->addWidget(outputBlurBox);
 #ifdef USECTSEGMENTATOR
     mainlayout->addWidget(outputSegmentatorBox);
 #endif
     mainlayout->addWidget(outputSpacingBox);
     mainlayout->addWidget(thresholdBox);
+    mainlayout->addWidget(outputBlurBox);
     mainlayout->addWidget(tubeBox);
     mainlayout->addWidget(seriesSelectorBox);
     mainlayout->addLayout(progressLayout);
@@ -260,9 +263,13 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
 
     // signal for updating blur, spacing and aqusition settings
     QTimer::singleShot(0, [=, this](void) {
-        emit this->blurRadiusChanged(this->m_blurRadius.data());
-        emit this->outputSpacingChanged(this->m_outputSpacing.data());
+        emit blurRadiusChanged(m_blurRadius.data());
+        emit useBlurChanged(outputBlurBox->isChecked());
+        emit useImageThresholdChanged(thresholdBox->isChecked());
+        emit imageThresholdMaxChanged(thresholdMaxSpinBox->value());
+        emit imageThresholdMinChanged(thresholdMinSpinBox->value());
         emit useOutputSpacingChanged(outputSpacingBox->isChecked());
+        emit outputSpacingChanged(m_outputSpacing.data());
         emit aqusitionAlFiltrationChanged(tubeAlFiltrationSpinBox->value());
         emit aqusitionSnFiltrationChanged(tubeSnFiltrationSpinBox->value());
         emit aqusitionVoltageChanged(tubeVoltageSpinBox->value());

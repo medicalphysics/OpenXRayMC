@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget* parent)
     // setting up signals for ct image import
     connect(ctdicomimportwidget, &CTDicomImportWidget::dicomSeriesActivated, ctimageimportpipeline, &CTImageImportPipeline::readImages);
     connect(ctdicomimportwidget, &CTDicomImportWidget::blurRadiusChanged, ctimageimportpipeline, &CTImageImportPipeline::setBlurRadius);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::useBlurChanged, ctimageimportpipeline, &CTImageImportPipeline::setUseBlur);
     connect(ctdicomimportwidget, &CTDicomImportWidget::outputSpacingChanged, ctimageimportpipeline, &CTImageImportPipeline::setOutputSpacing);
     connect(ctdicomimportwidget, &CTDicomImportWidget::useOutputSpacingChanged, ctimageimportpipeline, &CTImageImportPipeline::setUseOutputSpacing);
     connect(ctdicomimportwidget, &CTDicomImportWidget::useImageThresholdChanged, ctimageimportpipeline, &CTImageImportPipeline::setUseImageThreshold);

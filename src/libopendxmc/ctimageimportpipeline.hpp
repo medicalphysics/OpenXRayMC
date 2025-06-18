@@ -28,6 +28,7 @@ public:
     void updateImageData(std::shared_ptr<DataContainer>) override;
     void readImages(const QStringList& images);
     void setBlurRadius(const double*);
+    void setUseBlur(bool use);
     void setOutputSpacing(const double*);
     void setUseOutputSpacing(bool);
     void setUseImageThreshold(bool use);
@@ -39,6 +40,7 @@ private:
     std::array<double, 3> m_blurRadius = { 0, 0, 0 };
     double m_imageThresholdMax = 2000;
     double m_imageThresholdMin = -1024;
+    bool m_useBlur = false;
     bool m_useOutputSpacing = false;
     bool m_useImageThreshold = false;
 };

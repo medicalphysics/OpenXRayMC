@@ -40,6 +40,7 @@ signals:
     void dicomFolderSelectedForBrowsing(QString folderPath);
     void dicomSeriesActivated(const QStringList& filePaths);
     void blurRadiusChanged(const double*);
+    void useBlurChanged(bool);
     void outputSpacingChanged(const double*);
     void useOutputSpacingChanged(bool value);
     void useOrganSegmentator(bool value);
