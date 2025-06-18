@@ -134,8 +134,11 @@ void VolumerenderWidget::setupRenderingPipeline()
     // mapper->AutoAdjustSampleDistancesOff();
     // mapper->LockSampleDistanceToInputSpacingOff();
     // mapper->SetSampleDistance(0.2);
-    mapper->AutoAdjustSampleDistancesOn();
-    // mapper->LockSampleDistanceToInputSpacingOn();
+    mapper->AutoAdjustSampleDistancesOff();
+    mapper->LockSampleDistanceToInputSpacingOn();
+
+    mapper->SetMinimumImageSampleDistance(4.0);
+    mapper->SetMaximumImageSampleDistance(128.0);
 
     mapper->UseJitteringOn();
 
