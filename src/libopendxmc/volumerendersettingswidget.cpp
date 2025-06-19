@@ -176,6 +176,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     shade_layout->addLayout(tsl.layout);
 
     // Ambient
+    vprop->SetAmbient(0.75);
     auto ambient = getSettingsWidget<QSlider>(tr("Ambient"), this);
     ambient.widget->setValue(static_cast<int>(vprop->GetAmbient() * 100));
     connect(ambient.widget, &QSlider::valueChanged, [vprop, this](int value) {
