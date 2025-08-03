@@ -27,5 +27,6 @@ public:
     void queryHMGUPhantom();
 signals:
     void requestImportPhantom(int, double, double, double, int, int, int);
+    void requestImportCTDIPhantom(bool large);
     void requestImportHMGUPhantom(QString path);
 };

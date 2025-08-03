@@ -47,6 +47,8 @@ OtherPhantomImportWidget::OtherPhantomImportWidget(QWidget* parent)
     p_combo->addItem(tr("Select phantom to import"));
     p_combo->addItem(tr("Cylinder"));
     p_combo->addItem(tr("Cube"));
+    p_combo->addItem(tr("CTDI 32cm"));
+    p_combo->addItem(tr("CTDI 16cm"));
 
     connect(p_combo, &QComboBox::activated, [this](int index) {
         if (index == 0)
@@ -55,6 +57,10 @@ OtherPhantomImportWidget::OtherPhantomImportWidget(QWidget* parent)
             emit this->requestImportPhantom(0, 0.2, 0.2, 0.2, 160, 160, 500);
         } else if (index == 2) {
             emit this->requestImportPhantom(1, 0.1, 0.1, 0.1, 200, 200, 200);
+        } else if (index == 3) {
+            emit this->requestImportCTDIPhantom(true);
+        } else if (index == 4) {
+            emit this->requestImportCTDIPhantom(false);
         }
     });
     lay->addWidget(p_box);
@@ -83,6 +89,6 @@ void OtherPhantomImportWidget::queryHMGUPhantom()
 
     if (!path.isEmpty()) {
         settings.setValue("hmguimport/browsepath", path);
-        emit requestImportHMGUPhantom(path);        
+        emit requestImportHMGUPhantom(path);
     }
 }

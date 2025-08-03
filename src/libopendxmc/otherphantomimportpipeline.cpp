@@ -110,6 +110,90 @@ void OtherPhantomImportPipeline::importPhantom(int type, double dx, double dy, d
     emit dataProcessingFinished(ProgressWorkType::Importing);
 }
 
+void make_disc(std::vector<std::uint8_t>& vol, const std::array<std::size_t, 3>& dim, double radius, const std::array<double, 2>& center = { 0, 0 }, const std::uint8_t fill = 1)
+{
+    std::array<double, 2> c = { center[0] + dim[0] * 0.5, center[1] + dim[1] * 0.5 };
+    for (std::size_t z = 0; z < dim[2]; ++z)
+        for (std::size_t y = 0; y < dim[1]; ++y)
+            for (std::size_t x = 0; x < dim[0]; ++x) {
+                const auto ind = x + y * dim[0] + z * dim[0] * dim[1];
+                const auto x_pos = x - c[0];
+                const auto y_pos = y - c[1];
+                if (x_pos * x_pos + y_pos * y_pos <= radius * radius)
+                    vol[ind] = fill;
+            }
+}
+void OtherPhantomImportPipeline::importCTDIPhantom(bool large)
+{
+    emit dataProcessingStarted(ProgressWorkType::Importing);
+    auto vol = std::make_shared<DataContainer>();
+
+    const double radius = large ? 160.0 : 80.0;
+    constexpr double hole_radii = 5.0;
+    const std::size_t N = large ? 320 : 160;
+    const std::array<std::size_t, 3> dimensions = { N, N, 160 };
+    vol->setDimensions(dimensions);
+    vol->setSpacing({ 0.1, 0.1, 0.1 });
+
+    std::vector<std::uint8_t> organs(dimensions[0] * dimensions[1] * dimensions[2], 0);
+    make_disc(organs, dimensions, radius, { 0, 0 }, 1);
+    make_disc(organs, dimensions, hole_radii, { 0, 0 }, 2);
+    make_disc(organs, dimensions, hole_radii, { radius - hole_radii * 2, 0 }, 3);
+    make_disc(organs, dimensions, hole_radii, { 0, radius - hole_radii * 2 }, 4);
+    make_disc(organs, dimensions, hole_radii, { -radius + hole_radii * 2, 0 }, 5);
+    make_disc(organs, dimensions, hole_radii, { 0, -radius + hole_radii * 2 }, 6);
+    for (std::size_t z = 0; z < dimensions[2]; ++z)
+        for (std::size_t y = 0; y < dimensions[1]; ++y)
+            for (std::size_t x = 0; x < dimensions[0]; ++x) {
+                if (z <= dimensions[2] * 0.5 - 50.0 || z >= dimensions[2] * 0.5 + 50.0) {
+                    const auto ind = x + y * dimensions[0] + z * dimensions[0] * dimensions[1];
+                    if (organs[ind] != 1) {
+                        organs[ind] = 0;
+                    }
+                }
+            }
+
+    vol->setImageArray(DataContainer::ImageType::Organ, organs);
+
+    std::vector<std::uint8_t> mat(organs.size());
+    std::transform(std::execution::par_unseq, organs.cbegin(), organs.cend(), mat.begin(), [](const auto organ) {
+        if (organ == 1)
+            return static_cast<std::uint8_t>(1); // PMMA
+        else if (organ > 1)
+            return static_cast<std::uint8_t>(2); // Air
+        return static_cast<std::uint8_t>(0); // Air
+    });
+
+    vol->setImageArray(DataContainer::ImageType::Material, mat);
+
+    std::vector<DataContainer::Material> materials;
+    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = dxmc::NISTMaterials::Composition("Air, Dry (near sea level)") });
+    materials.push_back({ .name = "Polymethyl Methacralate (Lucite, Perspex)", .Z = dxmc::NISTMaterials::Composition("Polymethyl Methacralate (Lucite, Perspex)") });
+    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = dxmc::NISTMaterials::Composition("Air, Dry (near sea level)") });
+    vol->setMaterials(materials);
+
+    std::vector<std::string> organ_names;
+    organ_names.push_back("Air");
+    organ_names.push_back("PMMA");
+    organ_names.push_back("CTDI center");
+    organ_names.push_back("CTDI right");
+    organ_names.push_back("CTDI top");
+    organ_names.push_back("CTDI left");
+    organ_names.push_back("CTDI bottom");
+    vol->setOrganNames(organ_names);
+
+    const double air_dens = dxmc::NISTMaterials::density("Air, Dry (near sea level)");
+    const double pmma_dens = dxmc::NISTMaterials::density("Polymethyl Methacralate (Lucite, Perspex)");
+    std::vector<double> dens(organs.size());
+    std::transform(std::execution::par_unseq, mat.cbegin(), mat.cend(), dens.begin(), [air_dens, pmma_dens](const auto m) {
+        return m == 1 ? pmma_dens : air_dens;
+    });
+    vol->setImageArray(DataContainer::ImageType::Density, dens);
+
+    emit imageDataChanged(vol);
+    emit dataProcessingFinished(ProgressWorkType::Importing);
+}
+
 struct HMGUPhantom {
     enum class HMGUType {
         None,
