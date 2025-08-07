@@ -28,10 +28,12 @@ public:
     void setAqusitionVoltage(double kv);
     void setAlFiltration(double mm);
     void setSnFiltration(double mm);
+    void setAgFiltration(double mm);
     void updateImageData(std::shared_ptr<DataContainer>) override;
 
 private:
     double m_kv = 120;
     double m_Al_filt_mm = 0.9;
     double m_Sn_filt_mm = 0;
+    double m_Ag_filt_mm = 0;
 };

@@ -109,7 +109,7 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
 #endif // USECTSEGMENTATOR
 
     // voxel resize selection
-    auto outputSpacingBox = new QGroupBox(tr("Resize voxels to this spacing for imported series [XYZ]:"), this);
+    auto outputSpacingBox = new QGroupBox(tr("Resize voxels to this spacing [XYZ]:"), this);
     outputSpacingBox->setCheckable(true);
     outputSpacingBox->setChecked(false);
     connect(outputSpacingBox, &QGroupBox::toggled, [this](bool value) { emit useOutputSpacingChanged(value); });
@@ -182,8 +182,9 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
 #endif
 
     // tube settings
+    constexpr auto tubeAlignment = Qt::Alignment();
     auto tubeBox = new QGroupBox(tr("Aqusition tube settings: "), this);
-    auto tubeLayout = new QHBoxLayout;
+    auto tubeLayout = new QGridLayout;
     auto tubeVoltageLayout = new QVBoxLayout;
     auto tubeVoltageSpinBox = new QDoubleSpinBox(this);
     tubeVoltageSpinBox->setMinimum(70.0);
@@ -195,7 +196,7 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     auto tubeVoltageLabel = new QLabel(tr("Tube voltage"), this);
     tubeVoltageLayout->addWidget(tubeVoltageLabel);
     tubeVoltageLayout->addWidget(tubeVoltageSpinBox);
-    tubeLayout->addLayout(tubeVoltageLayout);
+    tubeLayout->addLayout(tubeVoltageLayout, 0, 0, tubeAlignment);
     auto tubeAlFiltrationLayout = new QVBoxLayout;
     auto tubeAlFiltrationSpinBox = new QDoubleSpinBox(this);
     tubeAlFiltrationSpinBox->setMinimum(0.0);
@@ -207,7 +208,7 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     auto tubeAlFiltrationLabel = new QLabel(tr("Al filtration"), this);
     tubeAlFiltrationLayout->addWidget(tubeAlFiltrationLabel);
     tubeAlFiltrationLayout->addWidget(tubeAlFiltrationSpinBox);
-    tubeLayout->addLayout(tubeAlFiltrationLayout);
+    tubeLayout->addLayout(tubeAlFiltrationLayout, 0, 1, tubeAlignment);
     auto tubeSnFiltrationLayout = new QVBoxLayout;
     auto tubeSnFiltrationSpinBox = new QDoubleSpinBox(this);
     tubeSnFiltrationSpinBox->setMinimum(0.0);
@@ -219,7 +220,19 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     auto tubeSnFiltrationLabel = new QLabel(tr("Sn filtration"), this);
     tubeSnFiltrationLayout->addWidget(tubeSnFiltrationLabel);
     tubeSnFiltrationLayout->addWidget(tubeSnFiltrationSpinBox);
-    tubeLayout->addLayout(tubeSnFiltrationLayout);
+    tubeLayout->addLayout(tubeSnFiltrationLayout, 0, 2, tubeAlignment);
+    auto tubeAgFiltrationLayout = new QVBoxLayout;
+    auto tubeAgFiltrationSpinBox = new QDoubleSpinBox(this);
+    tubeAgFiltrationSpinBox->setMinimum(0.0);
+    tubeAgFiltrationSpinBox->setMaximum(100.0);
+    tubeAgFiltrationSpinBox->setValue(0.0);
+    tubeAgFiltrationSpinBox->setSuffix(" mm");
+    tubeAgFiltrationSpinBox->setDecimals(1);
+    connect(tubeAgFiltrationSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [this](double val) { emit aqusitionAgFiltrationChanged(val); });
+    auto tubeAgFiltrationLabel = new QLabel(tr("Ag filtration"), this);
+    tubeAgFiltrationLayout->addWidget(tubeAgFiltrationLabel);
+    tubeAgFiltrationLayout->addWidget(tubeAgFiltrationSpinBox);
+    tubeLayout->addLayout(tubeAgFiltrationLayout, 1, 0, tubeAlignment);
     tubeBox->setLayout(tubeLayout);
 
     // adding progressbar for image import

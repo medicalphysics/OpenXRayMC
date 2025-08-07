@@ -114,6 +114,7 @@ MainWindow::MainWindow(QWidget* parent)
     statusBar->registerPipeline(ctsegmentationpipeline);
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionAlFiltrationChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setAlFiltration);
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionSnFiltrationChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setSnFiltration);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionAgFiltrationChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setAgFiltration);
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionVoltageChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setAqusitionVoltage);
     connect(ctsegmentationpipeline, &CTSegmentationPipeline::imageDataChanged, slicerender, &RenderWidgetsCollection::updateImageData);
     connect(ctimageimportpipeline, &CTImageImportPipeline::imageDataChanged, ctsegmentationpipeline, &CTSegmentationPipeline::updateImageData);

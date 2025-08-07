@@ -41,7 +41,10 @@ void CTSegmentationPipeline::setAlFiltration(double f)
 {
     m_Al_filt_mm = std::max(0.0, f);
 }
-
+void CTSegmentationPipeline::setAgFiltration(double f)
+{
+    m_Ag_filt_mm = std::max(0.0, f);
+}
 void CTSegmentationPipeline::setSnFiltration(double f)
 {
     m_Sn_filt_mm = std::max(0.0, f);
@@ -58,7 +61,7 @@ struct CTNumberData {
     double air_dens = 0;
 };
 
-CTNumberData getMeanCTNumbers(const std::vector<MatDens>& materials, double al_filtration, double sn_filtration, double tube_kvp)
+CTNumberData getMeanCTNumbers(const std::vector<MatDens>& materials, double al_filtration, double sn_filtration, double ag_filtration, double tube_kvp)
 {
 
     CTNumberData data;
@@ -66,7 +69,7 @@ CTNumberData getMeanCTNumbers(const std::vector<MatDens>& materials, double al_f
     Tube tube(tube_kvp);
     tube.setAlFiltration(al_filtration);
     tube.setSnFiltration(sn_filtration);
-
+    tube.setAgFiltration(ag_filtration);
     const auto spec_en = tube.getEnergy();
     const auto spec_w = tube.getSpecter(spec_en, true);
 
@@ -126,7 +129,7 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
     // Density for bone is to high
     materials.back().second = 1.09;
 
-    const auto mat_data = getMeanCTNumbers(materials, m_Al_filt_mm, m_Sn_filt_mm, m_kv);
+    const auto mat_data = getMeanCTNumbers(materials, m_Al_filt_mm, m_Sn_filt_mm, m_Ag_filt_mm, m_kv);
     const auto& mat_HU = mat_data.HU;
     std::vector<double> mat_HU_sep;
     for (std::size_t i = 0; i < mat_HU.size() - 1; ++i) {
@@ -165,5 +168,5 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
     data->setMaterials(cont_materials);
 
     emit dataProcessingFinished(ProgressWorkType::Segmentating);
-    emit imageDataChanged(data);    
+    emit imageDataChanged(data);
 }
