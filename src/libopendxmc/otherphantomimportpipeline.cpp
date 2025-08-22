@@ -123,7 +123,7 @@ void make_disc(std::vector<std::uint8_t>& vol, const std::array<std::size_t, 3>&
                     vol[ind] = fill;
             }
 }
-void OtherPhantomImportPipeline::importCTDIPhantom(bool large)
+void OtherPhantomImportPipeline::importCTDIPhantom(bool large, bool longPhantom)
 {
     emit dataProcessingStarted(ProgressWorkType::Importing);
     auto vol = std::make_shared<DataContainer>();
@@ -131,7 +131,8 @@ void OtherPhantomImportPipeline::importCTDIPhantom(bool large)
     const double radius = large ? 160.0 : 80.0;
     constexpr double hole_radii = 5.0;
     const std::size_t N = large ? 320 : 160;
-    const std::array<std::size_t, 3> dimensions = { N, N, 160 };
+    const std::size_t N_z = longPhantom ? 450 : 150;
+    const std::array<std::size_t, 3> dimensions = { N, N, N_z };
     vol->setDimensions(dimensions);
     vol->setSpacing({ 0.1, 0.1, 0.1 });
 
@@ -142,10 +143,12 @@ void OtherPhantomImportPipeline::importCTDIPhantom(bool large)
     make_disc(organs, dimensions, hole_radii, { 0, radius - hole_radii * 2 }, 4);
     make_disc(organs, dimensions, hole_radii, { -radius + hole_radii * 2, 0 }, 5);
     make_disc(organs, dimensions, hole_radii, { 0, -radius + hole_radii * 2 }, 6);
+
+    const double half_Chamber = longPhantom ? 150.0 : 50.0;
     for (std::size_t z = 0; z < dimensions[2]; ++z)
         for (std::size_t y = 0; y < dimensions[1]; ++y)
             for (std::size_t x = 0; x < dimensions[0]; ++x) {
-                if (z <= dimensions[2] * 0.5 - 50.0 || z >= dimensions[2] * 0.5 + 50.0) {
+                if (z <= dimensions[2] * 0.5 - half_Chamber || z >= dimensions[2] * 0.5 + half_Chamber) {
                     const auto ind = x + y * dimensions[0] + z * dimensions[0] * dimensions[1];
                     if (organs[ind] != 1) {
                         organs[ind] = 0;

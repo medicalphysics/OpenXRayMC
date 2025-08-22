@@ -49,6 +49,8 @@ OtherPhantomImportWidget::OtherPhantomImportWidget(QWidget* parent)
     p_combo->addItem(tr("Cube"));
     p_combo->addItem(tr("CTDI 32cm"));
     p_combo->addItem(tr("CTDI 16cm"));
+    p_combo->addItem(tr("CTDI 32cm long"));
+    p_combo->addItem(tr("CTDI 16cm long"));
 
     connect(p_combo, &QComboBox::activated, [this](int index) {
         if (index == 0)
@@ -58,9 +60,13 @@ OtherPhantomImportWidget::OtherPhantomImportWidget(QWidget* parent)
         } else if (index == 2) {
             emit this->requestImportPhantom(1, 0.1, 0.1, 0.1, 200, 200, 200);
         } else if (index == 3) {
-            emit this->requestImportCTDIPhantom(true);
+            emit this->requestImportCTDIPhantom(true, false);
         } else if (index == 4) {
-            emit this->requestImportCTDIPhantom(false);
+            emit this->requestImportCTDIPhantom(false, false);
+        } else if (index == 5) {
+            emit this->requestImportCTDIPhantom(true, true);
+        } else if (index == 6) {
+            emit this->requestImportCTDIPhantom(false, true);
         }
     });
     lay->addWidget(p_box);
