@@ -1,0 +1,90 @@
+/*This file is part of OpenXRayMC.
+
+OpenXRayMC is free software : you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OpenXRayMC is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with OpenXRayMC. If not, see < https://www.gnu.org/licenses/>.
+
+Copyright 2023 Erlend Andersen
+*/
+
+#include <xraymc_specialization.hpp>
+
+DXBeam::DXBeam(const std::map<std::size_t, double>& filtrationMaterials)
+    : xraymc::DXBeam<false>({ 0, 0, 0 }, { { { 1, 0, 0 }, { 0, -1, 0 } } }, filtrationMaterials)
+{
+    updatePosition();
+    setCollimation({ 20, 20 });
+}
+
+const std::array<double, 3>& DXBeam::rotationCenter() const { return m_rotation_center; }
+void DXBeam::setRotationCenter(const std::array<double, 3>& c)
+{
+    m_rotation_center = c;
+    updatePosition();
+}
+double DXBeam::sourcePatientDistance() const { return m_SPD; }
+void DXBeam::setSourcePatientDistance(double d)
+{
+    m_SPD = std::abs(d);
+    updatePosition();
+}
+double DXBeam::sourceDetectorDistance() const { return m_SDD; }
+void DXBeam::setSourceDetectorDistance(double d)
+{
+    m_SDD = std::abs(d);
+    updatePosition();
+}
+void DXBeam::setCollimation(const std::array<double, 2>& coll)
+{
+    const std::array<double, 2> ang = {
+        std::tan(0.5 * std::abs(coll[0]) / m_SDD), std::tan(0.5 * std::abs(coll[1]) / m_SDD)
+    };
+    setCollimationHalfAngles(ang);
+}
+std::array<double, 2> DXBeam::collimation() const
+{
+    const auto& ang = collimationHalfAngles();
+    std::array<double, 2> coll = {
+        2 * m_SDD * std::atan(ang[0]), 2 * m_SDD * std::atan(ang[1])
+    };
+    return coll;
+}
+
+double DXBeam::primaryAngleDeg() const
+{
+    return xraymc::RAD_TO_DEG<double>() * m_rotAngles[0];
+}
+void DXBeam::setPrimaryAngleDeg(double ang)
+{
+    m_rotAngles[0] = xraymc::DEG_TO_RAD<double>() * std::clamp(ang, -180.0, 180.0);
+    updatePosition();
+}
+double DXBeam::secondaryAngleDeg() const { return xraymc::RAD_TO_DEG<double>() * m_rotAngles[1]; }
+void DXBeam::setSecondaryAngleDeg(double ang)
+{
+    m_rotAngles[1] = xraymc::DEG_TO_RAD<double>() * std::clamp(ang, -90.0, 90.0);
+    updatePosition();
+}
+
+void DXBeam::updatePosition()
+{
+    std::array<std::array<double, 3>, 2> cosines = { { { 0, 0, 1 }, { -1, 0, 0 } } };
+    cosines[0] = xraymc::vectormath::rotate(cosines[0], { 0, 0, 1 }, m_rotAngles[0]);
+    cosines[1] = xraymc::vectormath::rotate(cosines[1], { 0, 0, 1 }, m_rotAngles[0]);
+    cosines[0] = xraymc::vectormath::rotate(cosines[0], { -1, 0, 0 }, m_rotAngles[1]);
+    cosines[1] = xraymc::vectormath::rotate(cosines[1], { -1, 0, 0 }, m_rotAngles[1]);
+    auto dir = xraymc::vectormath::cross(cosines[0], cosines[1]);
+    auto ddist = xraymc::vectormath::scale(dir, -m_SPD);
+
+    setPosition(xraymc::vectormath::add(m_rotation_center, ddist));
+    setDirectionCosines(cosines);
+}

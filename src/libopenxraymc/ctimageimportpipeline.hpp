@@ -1,0 +1,46 @@
+/*This file is part of OpenXRayMC.
+
+OpenXRayMC is free software : you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OpenXRayMC is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with OpenXRayMC. If not, see < https://www.gnu.org/licenses/>.
+
+Copyright 2023 Erlend Andersen
+*/
+
+#pragma once
+
+#include <basepipeline.hpp>
+
+#include <QStringList>
+
+class CTImageImportPipeline : public BasePipeline {
+public:
+    CTImageImportPipeline(QObject* parent = nullptr);
+    void updateImageData(std::shared_ptr<DataContainer>) override;
+    void readImages(const QStringList& images);
+    void setBlurRadius(const double*);
+    void setUseBlur(bool use);
+    void setOutputSpacing(const double*);
+    void setUseOutputSpacing(bool);
+    void setUseImageThreshold(bool use);
+    void setImageThresholdMax(double threshold);
+    void setImageThresholdMin(double threshold);
+
+private:
+    std::array<double, 3> m_outputSpacing = { 0, 0, 0 };
+    std::array<double, 3> m_blurRadius = { 0, 0, 0 };
+    double m_imageThresholdMax = 2000;
+    double m_imageThresholdMin = -1024;
+    bool m_useBlur = false;
+    bool m_useOutputSpacing = false;
+    bool m_useImageThreshold = false;
+};

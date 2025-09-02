@@ -1,6 +1,6 @@
 
 
-set(OPENDXMC_SOURCE_FILES 
+set(OPENXRayMC_SOURCE_FILES 
     beamsettingswidget.cpp
 	opendxmc.cpp
 	basesettingswidget.cpp
@@ -13,10 +13,10 @@ set(OPENDXMC_SOURCE_FILES
 
 #Adding icon resource for windows
 if(WIN32)
-    set(OPENDXMC_SOURCE_FILES ${OPENDXMC_SOURCE_FILES} ${PROJECT_SOURCE_DIR}/data/icons/icon.rc)
+    set(OPENXRayMC_SOURCE_FILES ${OPENXRayMC_SOURCE_FILES} ${PROJECT_SOURCE_DIR}/data/icons/icon.rc)
 endif()
 
-qt_add_executable(opendxmc ${OPENDXMC_SOURCE_FILES})
+qt_add_executable(opendxmc ${OPENXRayMC_SOURCE_FILES})
 
 # We expose headers for all targets consuming opendxmc
 target_include_directories(opendxmc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -25,7 +25,7 @@ target_compile_definitions(opendxmc PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
 target_link_libraries(opendxmc 
 	PRIVATE 
-    libopendxmc
+    libopenxraymc
     Qt6::Widgets   
 	)
 
@@ -37,7 +37,7 @@ set_target_properties(opendxmc PROPERTIES
 # adding dxmc physicslist to binary folder
 xraymclib_add_physics_list(opendxmc)
 
-if(${OPENDXMC_USECTSEGMENTATOR})
+if(${OPENXRayMC_USECTSEGMENTATOR})
     #adding models to binary folder
     copy_ctsegmentator_model_to_binary_dir(opendxmc)
     #adding torch binaries
@@ -77,7 +77,7 @@ add_custom_command(
 # Install targets
 include(InstallRequiredSystemLibraries)
 install(TARGETS opendxmc
-    EXPORT libopendxmc    
+    EXPORT libopenxraymc    
 )
 
 # Generate QT deployment script for the target opendxmc.
@@ -105,17 +105,17 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING.txt")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "Erlend Andersen")
-set(CPACK_PACKAGE_EXECUTABLES "opendxmc;OpenDXMC")
+set(CPACK_PACKAGE_EXECUTABLES "opendxmc;OpenXRayMC")
 set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/data/icons/icon_fill.bmp")
 set(CPACK_THREADS 0)
 #set(CPACK_SOURCE_GENERATOR "TGZ")
 if(WIN32)
     set(CPACK_NSIS_MODIFY_PATH "OFF")
     set(CPACK_NSIS_CREATE_ICONS_EXTRA
-    "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenDXMC.lnk' '$INSTDIR\\\\bin\\\\OpenDXMC.exe'"
+    "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\OpenXRayMC.lnk' '$INSTDIR\\\\bin\\\\OpenXRayMC.exe'"
     )
     set(CPACK_NSIS_DELETE_ICONS_EXTRA
-    "Delete '$SMPROGRAMS\\\\$START_MENU\\\\OpenDXMC.lnk'"
+    "Delete '$SMPROGRAMS\\\\$START_MENU\\\\OpenXRayMC.lnk'"
     )
     #Allow non UAC installs
     set(CPACK_NSIS_DEFINES "RequestExecutionLevel user") 
@@ -123,7 +123,7 @@ if(WIN32)
     set(CPACK_WIX_UPGRADE_GUID "aee28b68-bbb9-0f61-a782-3ab32ebdccae")
     set(CPACK_WIX_INSTALL_SCOPE "perUser")
     set(CPACK_WIX_VERSION "4")
-    set(CPACK_WIX_PROGRAM_MENU_FOLDER "OpenDXMC")
+    set(CPACK_WIX_PROGRAM_MENU_FOLDER "OpenXRayMC")
 
     set(CPACK_INNOSETUP_ICON_FILE "${PROJECT_SOURCE_DIR}/data/icons/icon.ico")
     set(CPACK_INNOSETUP_SETUP_PrivilegesRequired "lowest")

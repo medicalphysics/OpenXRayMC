@@ -1,17 +1,17 @@
-/*This file is part of OpenDXMC.
+/*This file is part of OpenXRayMC.
 
-OpenDXMC is free software : you can redistribute it and/or modify
+OpenXRayMC is free software : you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-OpenDXMC is distributed in the hope that it will be useful,
+OpenXRayMC is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with OpenDXMC. If not, see < https://www.gnu.org/licenses/>.
+along with OpenXRayMC. If not, see < https://www.gnu.org/licenses/>.
 
 Copyright 2019 Erlend Andersen
 */
@@ -46,15 +46,15 @@ int main(int argc, char* argv[])
     app.setStyle("fusion");
 
     app.processEvents();
-    splash.showMessage("Starting OpenDXMC", Qt::AlignCenter, Qt::white);
+    splash.showMessage("Starting OpenXRayMC", Qt::AlignCenter, Qt::white);
     app.processEvents();
 
-    app.setApplicationName("OpenDXMC");
+    app.setApplicationName("OpenXRayMC");
     app.setOrganizationName("SSHF");
     app.setWindowIcon(QIcon(":icons/icon.png"));
 
     MainWindow win;
-    QString title = "OpenDXMC v" + QString(APP_VERSION);
+    QString title = "OpenXRayMC v" + QString(APP_VERSION);
     win.setWindowTitle(title);
     win.show();
 
