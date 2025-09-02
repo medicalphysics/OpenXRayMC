@@ -23,7 +23,7 @@ Copyright 2024 Erlend Andersen
 #include <vtkImageData.h>
 #include <vtkSmartPointer.h>
 
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <array>
 #include <map>

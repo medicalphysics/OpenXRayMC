@@ -35,7 +35,7 @@ set_target_properties(opendxmc PROPERTIES
 )
 
 # adding dxmc physicslist to binary folder
-dxmclib_add_physics_list(opendxmc)
+xraymclib_add_physics_list(opendxmc)
 
 if(${OPENDXMC_USECTSEGMENTATOR})
     #adding models to binary folder

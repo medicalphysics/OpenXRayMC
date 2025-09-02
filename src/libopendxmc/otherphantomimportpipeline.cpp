@@ -16,7 +16,7 @@ along with OpenDXMC. If not, see < https://www.gnu.org/licenses/>.
 Copyright 2024 Erlend Andersen
 */
 
-#include "dxmc/material/nistmaterials.hpp"
+#include <xraymc_specialization.hpp>
 #include <otherphantomimportpipeline.hpp>
 
 #include <QCoreApplication>
@@ -93,13 +93,13 @@ void OtherPhantomImportPipeline::importPhantom(int type, double dx, double dy, d
     vol->setOrganNames(organ_names);
 
     for (const auto& n : organ_names) {
-        auto Z = dxmc::NISTMaterials::Composition(n);
+        auto Z = NISTMaterials::Composition(n);
         materials.push_back({ .name = n, .Z = Z });
     }
     vol->setMaterials(materials);
 
-    const double air_dens = dxmc::NISTMaterials::density(organ_names[0]);
-    const double pmma_dens = dxmc::NISTMaterials::density(organ_names[1]);
+    const double air_dens = NISTMaterials::density(organ_names[0]);
+    const double pmma_dens = NISTMaterials::density(organ_names[1]);
     std::vector<double> dens(N);
     std::transform(std::execution::par_unseq, mat.cbegin(), mat.cend(), dens.begin(), [air_dens, pmma_dens](const auto m) {
         return m == 1 ? pmma_dens : air_dens;
@@ -170,9 +170,9 @@ void OtherPhantomImportPipeline::importCTDIPhantom(bool large, bool longPhantom)
     vol->setImageArray(DataContainer::ImageType::Material, mat);
 
     std::vector<DataContainer::Material> materials;
-    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = dxmc::NISTMaterials::Composition("Air, Dry (near sea level)") });
-    materials.push_back({ .name = "Polymethyl Methacralate (Lucite, Perspex)", .Z = dxmc::NISTMaterials::Composition("Polymethyl Methacralate (Lucite, Perspex)") });
-    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = dxmc::NISTMaterials::Composition("Air, Dry (near sea level)") });
+    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = NISTMaterials::Composition("Air, Dry (near sea level)") });
+    materials.push_back({ .name = "Polymethyl Methacralate (Lucite, Perspex)", .Z = NISTMaterials::Composition("Polymethyl Methacralate (Lucite, Perspex)") });
+    materials.push_back({ .name = "Air, Dry (near sea level)", .Z = NISTMaterials::Composition("Air, Dry (near sea level)") });
     vol->setMaterials(materials);
 
     std::vector<std::string> organ_names;
@@ -185,8 +185,8 @@ void OtherPhantomImportPipeline::importCTDIPhantom(bool large, bool longPhantom)
     organ_names.push_back("CTDI bottom");
     vol->setOrganNames(organ_names);
 
-    const double air_dens = dxmc::NISTMaterials::density("Air, Dry (near sea level)");
-    const double pmma_dens = dxmc::NISTMaterials::density("Polymethyl Methacralate (Lucite, Perspex)");
+    const double air_dens = NISTMaterials::density("Air, Dry (near sea level)");
+    const double pmma_dens = NISTMaterials::density("Polymethyl Methacralate (Lucite, Perspex)");
     std::vector<double> dens(organs.size());
     std::transform(std::execution::par_unseq, mat.cbegin(), mat.cend(), dens.begin(), [air_dens, pmma_dens](const auto m) {
         return m == 1 ? pmma_dens : air_dens;

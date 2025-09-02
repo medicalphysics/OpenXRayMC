@@ -17,6 +17,7 @@ Copyright 2023 Erlend Andersen
 */
 
 #include <datacontainer.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <vtkImageExport.h>
 #include <vtkImageImport.h>
@@ -491,16 +492,16 @@ std::optional<std::vector<double>> DataContainer::generateSyntheticCT(double kvp
     const auto specter = tube.getSpecter(true);
     std::vector<double> attenuation(m_materials.size());
     for (std::size_t i = 0; i < m_materials.size(); ++i) {
-        auto m = dxmc::Material<5>::byWeight(m_materials[i].Z).value();
+        auto m = xraymc::Material<5>::byWeight(m_materials[i].Z).value();
         auto u_weight = std::transform_reduce(std::execution::par_unseq, specter.cbegin(), specter.cend(), 0.0, std::plus {}, [&m](const auto& s) { const auto& [e, I] = s;
         double att =m.attenuationValues(e).sum();
         return att*I; });
         attenuation[i] = u_weight;
     }
 
-    auto air = dxmc::Material<5>::byNistName("Air, Dry (near sea level)").value();
-    auto water = dxmc::Material<5>::byNistName("Water, Liquid").value();
-    const auto air_density = dxmc::NISTMaterials::density("Air, Dry (near sea level)");
+    auto air = xraymc::Material<5>::byNistName("Air, Dry (near sea level)").value();
+    auto water = xraymc::Material<5>::byNistName("Water, Liquid").value();
+    const auto air_density = xraymc::NISTMaterials::density("Air, Dry (near sea level)");
     constexpr double water_density = 1;
     const auto attenuation_air = air_density * std::transform_reduce(std::execution::par_unseq, specter.cbegin(), specter.cend(), 0.0, std::plus {}, [&air](const auto& s) { const auto& [e, I] = s;
         double att =air.attenuationValues(e).sum();

@@ -17,10 +17,10 @@ Copyright 2024 Erlend Andersen
 */
 
 #include <ctsegmentationpipeline.hpp>
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
-#include "dxmc/beams/tube/tube.hpp"
-#include "dxmc/material/nistmaterials.hpp"
+#include "xraymc/beams/tube/tube.hpp"
+#include "xraymc/material/nistmaterials.hpp"
 
 #include <execution>
 #include <numeric>
@@ -163,7 +163,7 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
     std::vector<DataContainer::Material> cont_materials(materials.size());
     for (int i = 0; i < materials.size(); ++i) {
         cont_materials[i].name = mat_names[i];
-        cont_materials[i].Z = dxmc::NISTMaterials::Composition(mat_names[i]);
+        cont_materials[i].Z = NISTMaterials::Composition(mat_names[i]);
     }
     data->setMaterials(cont_materials);
 

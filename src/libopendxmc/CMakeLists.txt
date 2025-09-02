@@ -15,7 +15,6 @@ qt_add_library(libopendxmc STATIC
 	custominteractorstyleimage.cpp
 	dosetablepipeline.cpp
 	dosetablewidget.cpp
-	dxmc_specialization.cpp
 	hdf5wrapper.cpp
 	h5io.cpp	
 	niftiwrapper.cpp
@@ -29,6 +28,7 @@ qt_add_library(libopendxmc STATIC
 	volumerendersettingswidget.cpp
 	volumelutwidget.cpp
 	volumerendersettings.cpp
+	xraymc_specialization.cpp
 	)
 
 # We expose headers for all targets consuming libopendxmc
@@ -44,7 +44,7 @@ target_link_libraries(libopendxmc PUBLIC
 	Qt${QT_VERSION_MAJOR}::Gui
 	Qt${QT_VERSION_MAJOR}::Charts
 	Qt${QT_VERSION_MAJOR}::Concurrent
-	libdxmc		
+	libxraymc	
 	VTK::CommonCore
 	VTK::GUISupportQt
 	VTK::DICOM

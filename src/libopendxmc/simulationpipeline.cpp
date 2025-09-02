@@ -17,12 +17,12 @@ Copyright 2023 Erlend Andersen
 */
 
 #include <beamactorcontainer.hpp>
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 #include <simulationpipeline.hpp>
 
-#include <dxmc/transport.hpp>
-#include <dxmc/world/world.hpp>
-#include <dxmc/world/worlditems/aavoxelgrid.hpp>
+#include <xraymc/transport.hpp>
+#include <xraymc/world/world.hpp>
+#include <xraymc/world/worlditems/aavoxelgrid.hpp>
 
 #include <algorithm>
 #include <execution>
@@ -122,10 +122,10 @@ void SimulationPipeline::timerEvent(QTimerEvent* event)
 }
 
 template <int CORRECTION = 1>
-void worker(bool deleteAirDose, int nthreads, std::shared_ptr<DataContainer> data, std::vector<std::shared_ptr<Beam>> beams, dxmc::TransportProgress* progress)
+void worker(bool deleteAirDose, int nthreads, std::shared_ptr<DataContainer> data, std::vector<std::shared_ptr<Beam>> beams, xraymc::TransportProgress* progress)
 {
-    using VoxelGrid = dxmc::AAVoxelGrid<5, CORRECTION, 255>;
-    using World = dxmc::World<VoxelGrid>;
+    using VoxelGrid = xraymc::AAVoxelGrid<5, CORRECTION, 255>;
+    using World = xraymc::World<VoxelGrid>;
 
     World world;
     auto& vgrid = world.template addItem<VoxelGrid>();
@@ -152,7 +152,7 @@ void worker(bool deleteAirDose, int nthreads, std::shared_ptr<DataContainer> dat
 
     world.build();
 
-    dxmc::Transport transport;
+    xraymc::Transport transport;
     if (nthreads > 0)
         transport.setNumberOfThreads(nthreads);
 

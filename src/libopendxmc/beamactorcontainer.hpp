@@ -18,7 +18,7 @@ Copyright 2024 Erlend Andersen
 
 #pragma once
 
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>

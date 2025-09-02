@@ -69,11 +69,11 @@ endif()
 include(FetchContent)
 ## Adding DXMClib package
 FetchContent_Declare(
-    libdxmc
-    GIT_REPOSITORY https://github.com/medicalphysics/DXMClib.git
-    GIT_TAG develop
+    libxraymc
+    GIT_REPOSITORY https://github.com/medicalphysics/XRayMClib.git
+    GIT_TAG namechange
     )
-FetchContent_MakeAvailable(libdxmc)
+FetchContent_MakeAvailable(libxraymc)
 
 if(${OPENDXMC_USECTSEGMENTATOR})
     ## Adding CTSegmentator package

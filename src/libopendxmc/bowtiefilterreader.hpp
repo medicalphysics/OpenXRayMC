@@ -18,7 +18,7 @@ Copyright 2023 Erlend Andersen
 
 #pragma once
 
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <QMap>
 #include <QObject>

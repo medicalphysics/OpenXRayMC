@@ -20,7 +20,7 @@ Copyright 2024 Erlend Andersen
 
 #include <beamactorcontainer.hpp>
 #include <datacontainer.hpp>
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <QMap>
 #include <QStandardItemModel>

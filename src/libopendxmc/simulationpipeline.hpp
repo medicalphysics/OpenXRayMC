@@ -19,8 +19,8 @@ Copyright 2023 Erlend Andersen
 #pragma once
 
 #include <basepipeline.hpp>
-#include <dxmc_specialization.hpp>
-#include "dxmc/transportprogress.hpp"
+#include <xraymc_specialization.hpp>
+#include "xraymc/transportprogress.hpp"
 
 
 #include <QString>
@@ -62,5 +62,5 @@ private:
     int m_lowenergyCorrection = 1;
     bool m_deleteAirDose = true;
     int m_timerID = 0;
-    dxmc::TransportProgress m_progress;
+    xraymc::TransportProgress m_progress;
 };

@@ -16,10 +16,10 @@ along with OpenDXMC. If not, see < https://www.gnu.org/licenses/>.
 Copyright 2023 Erlend Andersen
 */
 
-#include <dxmc_specialization.hpp>
+#include <xraymc_specialization.hpp>
 
 DXBeam::DXBeam(const std::map<std::size_t, double>& filtrationMaterials)
-    : dxmc::DXBeam<false>({ 0, 0, 0 }, { { { 1, 0, 0 }, { 0, -1, 0 } } }, filtrationMaterials)
+    : xraymc::DXBeam<false>({ 0, 0, 0 }, { { { 1, 0, 0 }, { 0, -1, 0 } } }, filtrationMaterials)
 {
     updatePosition();
     setCollimation({ 20, 20 });
@@ -61,30 +61,30 @@ std::array<double, 2> DXBeam::collimation() const
 
 double DXBeam::primaryAngleDeg() const
 {
-    return dxmc::RAD_TO_DEG<double>() * m_rotAngles[0];
+    return xraymc::RAD_TO_DEG<double>() * m_rotAngles[0];
 }
 void DXBeam::setPrimaryAngleDeg(double ang)
 {
-    m_rotAngles[0] = dxmc::DEG_TO_RAD<double>() * std::clamp(ang, -180.0, 180.0);
+    m_rotAngles[0] = xraymc::DEG_TO_RAD<double>() * std::clamp(ang, -180.0, 180.0);
     updatePosition();
 }
-double DXBeam::secondaryAngleDeg() const { return dxmc::RAD_TO_DEG<double>() * m_rotAngles[1]; }
+double DXBeam::secondaryAngleDeg() const { return xraymc::RAD_TO_DEG<double>() * m_rotAngles[1]; }
 void DXBeam::setSecondaryAngleDeg(double ang)
 {
-    m_rotAngles[1] = dxmc::DEG_TO_RAD<double>() * std::clamp(ang, -90.0, 90.0);
+    m_rotAngles[1] = xraymc::DEG_TO_RAD<double>() * std::clamp(ang, -90.0, 90.0);
     updatePosition();
 }
 
 void DXBeam::updatePosition()
 {
     std::array<std::array<double, 3>, 2> cosines = { { { 0, 0, 1 }, { -1, 0, 0 } } };
-    cosines[0] = dxmc::vectormath::rotate(cosines[0], { 0, 0, 1 }, m_rotAngles[0]);
-    cosines[1] = dxmc::vectormath::rotate(cosines[1], { 0, 0, 1 }, m_rotAngles[0]);
-    cosines[0] = dxmc::vectormath::rotate(cosines[0], { -1, 0, 0 }, m_rotAngles[1]);
-    cosines[1] = dxmc::vectormath::rotate(cosines[1], { -1, 0, 0 }, m_rotAngles[1]);
-    auto dir = dxmc::vectormath::cross(cosines[0], cosines[1]);
-    auto ddist = dxmc::vectormath::scale(dir, -m_SPD);
+    cosines[0] = xraymc::vectormath::rotate(cosines[0], { 0, 0, 1 }, m_rotAngles[0]);
+    cosines[1] = xraymc::vectormath::rotate(cosines[1], { 0, 0, 1 }, m_rotAngles[0]);
+    cosines[0] = xraymc::vectormath::rotate(cosines[0], { -1, 0, 0 }, m_rotAngles[1]);
+    cosines[1] = xraymc::vectormath::rotate(cosines[1], { -1, 0, 0 }, m_rotAngles[1]);
+    auto dir = xraymc::vectormath::cross(cosines[0], cosines[1]);
+    auto ddist = xraymc::vectormath::scale(dir, -m_SPD);
 
-    setPosition(dxmc::vectormath::add(m_rotation_center, ddist));
+    setPosition(xraymc::vectormath::add(m_rotation_center, ddist));
     setDirectionCosines(cosines);
 }

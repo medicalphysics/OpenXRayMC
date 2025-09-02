@@ -49,7 +49,7 @@ std::array<std::array<double, 3>, 4> pointsFromCollimations(
 {
     std::array<std::array<double, 3>, 4> r;
 
-    const auto dir = dxmc::vectormath::cross(cosines[0], cosines[1]);
+    const auto dir = xraymc::vectormath::cross(cosines[0], cosines[1]);
     const auto sinx_r = std::sin(angles[0]);
     const auto siny_r = std::sin(angles[1]);
     constexpr std::array<int, 4> y_sign = { 1, -1, -1, 1 };
@@ -63,7 +63,7 @@ std::array<std::array<double, 3>, 4> pointsFromCollimations(
             cosines[0][1] * sinx + cosines[1][1] * siny + dir[1] * sinz,
             cosines[0][2] * sinx + cosines[1][2] * siny + dir[2] * sinz
         };
-        r[i] = dxmc::vectormath::add(start, dxmc::vectormath::scale(raw, scale));
+        r[i] = xraymc::vectormath::add(start, xraymc::vectormath::scale(raw, scale));
     }
     return r;
 }
@@ -185,7 +185,7 @@ void BeamActorContainer::update()
             const auto& start = arg.position();
             const auto& dir = arg.direction();
             constexpr double lenght = 20;
-            const auto stop = dxmc::vectormath::add(start, dxmc::vectormath::scale(dir, lenght));
+            const auto stop = xraymc::vectormath::add(start, xraymc::vectormath::scale(dir, lenght));
             points->InsertNextPoint(start.data());
             points->InsertNextPoint(stop.data());
             cells->InsertNextCell(2);
