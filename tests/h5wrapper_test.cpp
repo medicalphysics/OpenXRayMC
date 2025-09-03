@@ -1,8 +1,8 @@
 
-#include "opendxmc/h5wrapper.h"
+#include "openxraymc/h5wrapper.h"
 
-#include "dxmc/material.h"
-#include "dxmc/source.h"
+#include "xraymc/material.h"
+#include "xraymc/source.h"
 
 #include <memory>
 #include <vector>

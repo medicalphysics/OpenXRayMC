@@ -2,7 +2,7 @@
 
 set(OPENXRayMC_SOURCE_FILES 
     beamsettingswidget.cpp
-	opendxmc.cpp
+	openxraymc.cpp
 	basesettingswidget.cpp
 	mainwindow.cpp
 	ctdicomimportwidget.cpp
@@ -18,7 +18,7 @@ endif()
 
 qt_add_executable(openxraymc ${OPENXRayMC_SOURCE_FILES})
 
-# We expose headers for all targets consuming opendxmc
+# We expose headers for all targets consuming openxraymc
 target_include_directories(openxraymc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_compile_definitions(openxraymc PRIVATE APP_VERSION="${PROJECT_VERSION}")
@@ -34,7 +34,7 @@ set_target_properties(openxraymc PROPERTIES
     MACOSX_BUNDLE ON
 )
 
-# adding dxmc physicslist to binary folder
+# adding xraymc physicslist to binary folder
 xraymclib_add_physics_list(openxraymc)
 
 if(${OPENXRayMC_USECTSEGMENTATOR})
@@ -82,7 +82,7 @@ install(TARGETS openxraymc
 
 # Generate QT deployment script for the target openxraymc.
 qt6_generate_deploy_app_script(
-    TARGET openxraymc  
+    TARGET openxraymc    
     OUTPUT_SCRIPT qt_deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )

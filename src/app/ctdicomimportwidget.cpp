@@ -1,17 +1,17 @@
-/*This file is part of OpenDXMC.
+/*This file is part of OpenXRayMC.
 
-OpenDXMC is free software : you can redistribute it and/or modify
+OpenXRayMC is free software : you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-OpenDXMC is distributed in the hope that it will be useful,
+OpenXRayMC is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with OpenDXMC. If not, see < https://www.gnu.org/licenses/>.
+along with OpenXRayMC. If not, see < https://www.gnu.org/licenses/>.
 
 Copyright 2024 Erlend Andersen
 */
@@ -41,7 +41,7 @@ Copyright 2024 Erlend Andersen
 CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     : BaseSettingsWidget(parent)
 {
-    QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenDXMC", "app");
+    QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenXRayMC", "app");
     auto* mainlayout = new QVBoxLayout;
     auto* browseLayout = new QHBoxLayout;
     // setting ut folder line edit with completer and memory of last folderpath
@@ -307,7 +307,7 @@ void CTDicomImportWidget::setImportProgress(int current, int total, QString fmt)
 
 void CTDicomImportWidget::browseForFolder(void)
 {
-    QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenDXMC", "app");
+    QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenXRayMC", "app");
     QString lastFolderPath = settings.value("dicomimport/browsepath").value<QString>();
     QString path = QFileDialog::getExistingDirectory(this, "Select folder with dicom files", lastFolderPath, QFileDialog::ShowDirsOnly);
     if (!path.isEmpty()) {
@@ -326,7 +326,7 @@ void CTDicomImportWidget::lookInFolder(const QString folderPath)
     m_imageDirectorySnooper->SetQueryFilesToAlways();
 
     if (!folderPath.isEmpty()) {
-        QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenDXMC", "app");
+        QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenXRayMC", "app");
         settings.setValue("dicomimport/browsepath", folderPath);
     }
 

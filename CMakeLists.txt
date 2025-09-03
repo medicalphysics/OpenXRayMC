@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(OpenDXMC VERSION 1.2.6 DESCRIPTION "OpenDXMC description" LANGUAGES CXX)
+project(OpenXRayMC VERSION 1.2.6 DESCRIPTION "OpenXRayMC description" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,7 +28,7 @@ else()
 endif()
 
 #Settings to use DL organ segmentator
-set(OPENDXMC_USECTSEGMENTATOR Off CACHE BOOL "Use DL organ segmentation for CT")
+set(OPENXRayMC_USECTSEGMENTATOR Off CACHE BOOL "Use DL organ segmentation for CT")
 
 ## Include QT
 ## QT specifics for CMake (https://doc.qt.io/qt-6/cmake-get-started.html)
@@ -67,15 +67,15 @@ endif()
 
 ## Fetch packages
 include(FetchContent)
-## Adding DXMClib package
+## Adding XRayMClib package
 FetchContent_Declare(
-    libdxmc
-    GIT_REPOSITORY https://github.com/medicalphysics/DXMClib.git
-    GIT_TAG develop
+    libxraymc
+    GIT_REPOSITORY https://github.com/medicalphysics/XRayMClib.git
+    GIT_TAG namechange
     )
-FetchContent_MakeAvailable(libdxmc)
+FetchContent_MakeAvailable(libxraymc)
 
-if(${OPENDXMC_USECTSEGMENTATOR})
+if(${OPENXRayMC_USECTSEGMENTATOR})
     ## Adding CTSegmentator package
     FetchContent_Declare(
         libctsegmentator
@@ -97,7 +97,7 @@ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${CMAKE_CONFIGURATION_TYPE
 
 # Targets that we develop here
 # The compiled library code is here
-add_subdirectory(src/libopendxmc)
+add_subdirectory(src/libopenxraymc)
 
 # The executable code is here
 add_subdirectory(src/app)
