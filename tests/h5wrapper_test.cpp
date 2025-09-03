@@ -1,5 +1,5 @@
 
-#include "opendxmc/h5wrapper.h"
+#include "openxraymc/h5wrapper.h"
 
 #include "xraymc/material.h"
 #include "xraymc/source.h"

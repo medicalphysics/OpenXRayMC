@@ -2,7 +2,7 @@
 
 set(OPENXRayMC_SOURCE_FILES 
     beamsettingswidget.cpp
-	opendxmc.cpp
+	openxraymc.cpp
 	basesettingswidget.cpp
 	mainwindow.cpp
 	ctdicomimportwidget.cpp
@@ -16,38 +16,38 @@ if(WIN32)
     set(OPENXRayMC_SOURCE_FILES ${OPENXRayMC_SOURCE_FILES} ${PROJECT_SOURCE_DIR}/data/icons/icon.rc)
 endif()
 
-qt_add_executable(opendxmc ${OPENXRayMC_SOURCE_FILES})
+qt_add_executable(openxraymc ${OPENXRayMC_SOURCE_FILES})
 
-# We expose headers for all targets consuming opendxmc
-target_include_directories(opendxmc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+# We expose headers for all targets consuming openxraymc
+target_include_directories(openxraymc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_compile_definitions(opendxmc PRIVATE APP_VERSION="${PROJECT_VERSION}")
+target_compile_definitions(openxraymc PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
-target_link_libraries(opendxmc 
+target_link_libraries(openxraymc 
 	PRIVATE 
     libopenxraymc
     Qt6::Widgets   
 	)
 
-set_target_properties(opendxmc PROPERTIES
+set_target_properties(openxraymc PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
 )
 
-# adding dxmc physicslist to binary folder
-xraymclib_add_physics_list(opendxmc)
+# adding xraymc physicslist to binary folder
+xraymclib_add_physics_list(openxraymc)
 
 if(${OPENXRayMC_USECTSEGMENTATOR})
     #adding models to binary folder
-    copy_ctsegmentator_model_to_binary_dir(opendxmc)
+    copy_ctsegmentator_model_to_binary_dir(openxraymc)
     #adding torch binaries
-    copy_torch_binaries(opendxmc)
+    copy_torch_binaries(openxraymc)
 
-    target_compile_definitions(opendxmc PRIVATE USECTSEGMENTATOR=1)
+    target_compile_definitions(openxraymc PRIVATE USECTSEGMENTATOR=1)
 endif()
 
 # Adding icons to binary resource
-qt_add_resources(opendxmc icons
+qt_add_resources(openxraymc icons
     PREFIX "/icons"
     BASE "${CMAKE_SOURCE_DIR}/data/icons"
     FILES 
@@ -58,31 +58,31 @@ qt_add_resources(opendxmc icons
 
 # adding phantoms to be available in binary folder
 add_custom_command(
-  TARGET opendxmc
+  TARGET openxraymc
   POST_BUILD
   COMMAND ${CMAKE_COMMAND}
-  ARGS -E copy_directory_if_different "${PROJECT_SOURCE_DIR}/data/phantoms" "$<TARGET_FILE_DIR:opendxmc>/data/phantoms"
+  ARGS -E copy_directory_if_different "${PROJECT_SOURCE_DIR}/data/phantoms" "$<TARGET_FILE_DIR:openxraymc>/data/phantoms"
   COMMENT "Copying ICRP phantoms to build folder"
 )
 # adding bowtiefilters to be available in binary folder
 add_custom_command(
-  TARGET opendxmc
+  TARGET openxraymc
   POST_BUILD
   COMMAND ${CMAKE_COMMAND}
-  ARGS -E copy_directory_if_different "${PROJECT_SOURCE_DIR}/data/bowtiefilters" "$<TARGET_FILE_DIR:opendxmc>/data/bowtiefilters"
+  ARGS -E copy_directory_if_different "${PROJECT_SOURCE_DIR}/data/bowtiefilters" "$<TARGET_FILE_DIR:openxraymc>/data/bowtiefilters"
   COMMENT "Copying bowtie filters to build folder"
 )
 
 
 # Install targets
 include(InstallRequiredSystemLibraries)
-install(TARGETS opendxmc
+install(TARGETS openxraymc
     EXPORT libopenxraymc    
 )
 
-# Generate QT deployment script for the target opendxmc.
+# Generate QT deployment script for the target openxraymc.
 qt6_generate_deploy_app_script(
-    TARGET opendxmc    
+    TARGET openxraymc    
     OUTPUT_SCRIPT qt_deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
@@ -95,7 +95,7 @@ install(DIRECTORY "${CMAKE_SOURCE_DIR}/data/bowtiefilters" DESTINATION "${CMAKE_
 
 if(WIN32)
     # Install dependent runtime
-    install(FILES $<TARGET_RUNTIME_DLLS:opendxmc> TYPE BIN)
+    install(FILES $<TARGET_RUNTIME_DLLS:openxraymc> TYPE BIN)
 endif()
 
 
@@ -105,7 +105,7 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING.txt")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "Erlend Andersen")
-set(CPACK_PACKAGE_EXECUTABLES "opendxmc;OpenXRayMC")
+set(CPACK_PACKAGE_EXECUTABLES "openxraymc;OpenXRayMC")
 set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/data/icons/icon_fill.bmp")
 set(CPACK_THREADS 0)
 #set(CPACK_SOURCE_GENERATOR "TGZ")
@@ -130,7 +130,7 @@ if(WIN32)
     set(CPACK_INNOSETUP_SETUP_PrivilegesRequiredOverridesAllowed "commandline dialog")    
     set(CPACK_INNOSETUP_USE_MODERN_WIZARD ON)
     set(CPACK_INNOSETUP_CREATE_UNINSTALL_LINK ON)    
-    set(CPACK_INNOSETUP_RUN_EXECUTABLES "{app}/bin/opendxmc")
+    set(CPACK_INNOSETUP_RUN_EXECUTABLES "{app}/bin/openxraymc")
 endif()
 include(CPack)
 
