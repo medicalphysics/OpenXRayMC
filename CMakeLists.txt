@@ -71,7 +71,7 @@ include(FetchContent)
 FetchContent_Declare(
     libxraymc
     GIT_REPOSITORY https://github.com/medicalphysics/XRayMClib.git
-    GIT_TAG namechange
+    GIT_TAG develop
     )
 FetchContent_MakeAvailable(libxraymc)
 
