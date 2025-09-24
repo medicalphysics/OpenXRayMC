@@ -289,7 +289,7 @@ void SliceRenderWidget::setupSlicePipeline(int orientation, bool lowerLeftText, 
     if (lowerLeftText) {
         // unit txt
         m_unitText = vtkSmartPointer<vtkTextActor>::New();
-        m_renderer->AddActor2D(m_unitText);
+        m_renderer->AddViewProp(m_unitText);
         auto txtStyle = m_unitText->GetTextProperty();
         txtStyle->SetColor(TEXT_COLOR.data());
         txtStyle->BoldOn();
@@ -297,7 +297,7 @@ void SliceRenderWidget::setupSlicePipeline(int orientation, bool lowerLeftText, 
         // window txt
         m_windowText = vtkSmartPointer<vtkTextActor>::New();
         m_windowText->SetTextProperty(txtStyle);
-        m_renderer->AddActor2D(m_windowText);
+        m_renderer->AddViewProp(m_windowText);
     }
 }
 

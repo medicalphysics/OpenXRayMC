@@ -414,7 +414,7 @@ VolumeLUTWidget::VolumeLUTWidget(VolumeRenderSettings* settings, VolumeLUTWidget
         auto checkbox = new QCheckBox("Gradient LUT");
         checkbox->setCheckState(Qt::CheckState::Unchecked);
         this->m_settings->volumeProperty()->SetDisableGradientOpacity(true);
-        connect(checkbox, &QCheckBox::stateChanged, [=, this](int state) {
+        connect(checkbox, &QCheckBox::checkStateChanged, [=, this](int state) {
             if (state == 0) {
                 view->setEnabled(false);
                 this->m_settings->volumeProperty()->SetDisableGradientOpacity(true);

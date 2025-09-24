@@ -456,7 +456,7 @@ QWidget* RenderWidgetsCollection::createRendersettingsWidget(QWidget* parent)
 
     auto show_beams = addWidgetAndLabel<QCheckBox>(tr("Show beam outlines"), layout, wid);
     show_beams->setChecked(true);
-    connect(show_beams, &QCheckBox::stateChanged, this, &RenderWidgetsCollection::setBeamActorsVisible);
+    connect(show_beams, &QCheckBox::checkStateChanged, this, &RenderWidgetsCollection::setBeamActorsVisible);
 
     auto sliceg = new QGroupBox(tr("Slice render settings"), wid);
     auto sliceg_layout = new QVBoxLayout;
@@ -466,7 +466,7 @@ QWidget* RenderWidgetsCollection::createRendersettingsWidget(QWidget* parent)
 
     auto ctbackground = addWidgetAndLabel<QCheckBox>(tr("Use CT background"), sliceg_layout, parent);
     ctbackground->setChecked(false);
-    connect(ctbackground, &QCheckBox::stateChanged, this, &RenderWidgetsCollection::setUseCTBackground);
+    connect(ctbackground, &QCheckBox::checkStateChanged, this, &RenderWidgetsCollection::setUseCTBackground);
 
     auto inter_type = addWidgetAndLabel<QComboBox>(tr("Set interpolation type"), sliceg_layout, parent);
     inter_type->addItem(tr("Nearest"));

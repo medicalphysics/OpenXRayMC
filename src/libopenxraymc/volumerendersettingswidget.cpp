@@ -135,7 +135,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     // jittering
     auto jittering = getSettingsWidget<QCheckBox>(tr("Use jittering"), this);
     jittering.widget->setChecked(m_settings->mapper()->GetUseJittering());
-    connect(jittering.widget, &QCheckBox::stateChanged, [this](int state) {
+    connect(jittering.widget, &QCheckBox::checkStateChanged, [this](int state) {
         m_settings->mapper()->SetUseJittering(state != 0);
         m_settings->render();
     });
@@ -169,7 +169,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     // two sided lightning
     auto tsl = getSettingsWidget<QCheckBox>(tr("Two sided lightning"), this);
     tsl.widget->setChecked(m_settings->renderer()->GetTwoSidedLighting());
-    connect(tsl.widget, &QCheckBox::stateChanged, [this](int state) {
+    connect(tsl.widget, &QCheckBox::checkStateChanged, [this](int state) {
         m_settings->renderer()->SetTwoSidedLighting(state != 0);
         m_settings->render();
     });
@@ -249,7 +249,7 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     // computeNormalFromOpacity
     auto computeNormalFromOpacity = getSettingsWidget<QCheckBox>(tr("Compute normals from opacity"), this);
     computeNormalFromOpacity.widget->setChecked(m_settings->mapper()->GetComputeNormalFromOpacity());
-    connect(computeNormalFromOpacity.widget, &QCheckBox::stateChanged, [this](int state) {
+    connect(computeNormalFromOpacity.widget, &QCheckBox::checkStateChanged, [this](int state) {
         m_settings->mapper()->SetComputeNormalFromOpacity(state != 0);
         m_settings->render();
     });
@@ -271,11 +271,11 @@ VolumerenderSettingsWidget::VolumerenderSettingsWidget(VolumeRenderSettings* set
     // option for power opacity transfer;
     auto uselog10 = new QCheckBox(tr("Power opacity"), this);
     uselog10->setChecked(false);
-    connect(uselog10, &QCheckBox::stateChanged, [this](int state) { m_settings->setUsePowerOpacityLUT(state != 0); });
+    connect(uselog10, &QCheckBox::checkStateChanged, [this](int state) { m_settings->setUsePowerOpacityLUT(state != 0); });
     //  option for color crop;
     auto colorcrop = new QCheckBox(tr("Crop colors to opacity"), this);
     colorcrop->setChecked(true);
-    connect(colorcrop, &QCheckBox::stateChanged, [this](int state) { m_settings->setCropColorToOpacityRange(state != 0); });
+    connect(colorcrop, &QCheckBox::checkStateChanged, [this](int state) { m_settings->setCropColorToOpacityRange(state != 0); });
     auto color_opt_layout = new QHBoxLayout;
     color_opt_layout->setContentsMargins(0, 0, 0, 0);
     color_opt_layout->addWidget(colorcrop);
