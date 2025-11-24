@@ -60,7 +60,7 @@ void CTOrganSegmentatorPipeline::updateImageData(std::shared_ptr<DataContainer> 
 
     for (const auto& job : jobs) {
         if (m_requestCancel) {
-            emit importProgressChanged(-1, -1);
+            emit importProgressChanged(-1, -1, "");
             emit dataProcessingFinished(ProgressWorkType::Segmentating);
             return;
         }
