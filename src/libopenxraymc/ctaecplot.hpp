@@ -20,10 +20,11 @@ Copyright 2023 Erlend Andersen
 
 #include <datacontainer.hpp>
 
-#include <QChartView>
+//#include<QChartView>
+#include <QGraphsView>
 #include <QValueAxis>
 
-class CTAECPlot : public QChartView {
+class CTAECPlot : public QGraphsView {
     Q_OBJECT
 public:
     CTAECPlot(QWidget* parent = nullptr);

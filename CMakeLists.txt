@@ -32,7 +32,7 @@ set(OPENXRayMC_USECTSEGMENTATOR Off CACHE BOOL "Use DL organ segmentation for CT
 
 ## Include QT
 ## QT specifics for CMake (https://doc.qt.io/qt-6/cmake-get-started.html)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Graphs Concurrent)
 qt_standard_project_setup()
 
 # Adding VTK package
