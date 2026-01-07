@@ -1,0 +1,25 @@
+{
+  "version": 9,
+  "configurePresets": [
+    {
+      "name": "x64-debug-user",
+      "displayName": "x64 Debug User",
+      "description": "Target Windows (64-bit) with the Visual Studio development environment. (Debug)",
+      "inherits": "x64-debug",
+      "cacheVariables": {
+        "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
+        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6"
+      }
+    },
+    {
+      "name": "x64-release-user",
+      "displayName": "x64 Release User",
+      "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
+      "inherits": "x64-release",
+      "cacheVariables": {
+        "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
+        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6"
+      }
+    }
+  ]
+}
