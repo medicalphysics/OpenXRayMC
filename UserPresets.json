@@ -8,7 +8,8 @@
       "inherits": "x64-debug",
       "cacheVariables": {
         "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
-        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6"
+        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6",
+        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.5.2"
       }
     },
     {
@@ -18,7 +19,8 @@
       "inherits": "x64-release",
       "cacheVariables": {
         "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
-        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6"
+        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6",
+        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.5.2"
       }
     }
   ]
