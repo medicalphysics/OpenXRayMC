@@ -29,6 +29,7 @@ public:
     void setAlFiltration(double mm);
     void setSnFiltration(double mm);
     void setAgFiltration(double mm);
+    void setUseSchneider(bool use);
     void updateImageData(std::shared_ptr<DataContainer>) override;
 
 private:
@@ -36,4 +37,5 @@ private:
     double m_Al_filt_mm = 0.9;
     double m_Sn_filt_mm = 0;
     double m_Ag_filt_mm = 0;
+    bool m_useSchneider = false;
 };

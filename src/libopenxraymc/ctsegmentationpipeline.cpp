@@ -21,6 +21,7 @@ Copyright 2024 Erlend Andersen
 
 #include "xraymc/beams/tube/tube.hpp"
 #include "xraymc/material/nistmaterials.hpp"
+#include <xraymc/world/worlditems/aavoxelgrid.hpp>
 
 #include <execution>
 #include <numeric>
@@ -48,6 +49,11 @@ void CTSegmentationPipeline::setAgFiltration(double f)
 void CTSegmentationPipeline::setSnFiltration(double f)
 {
     m_Sn_filt_mm = std::max(0.0, f);
+}
+
+void CTSegmentationPipeline::setUseSchneider(bool use)
+{
+    m_useSchneider = use;
 }
 
 using MatDens = std::pair<Material, double>;
@@ -113,13 +119,8 @@ CTNumberData getMeanCTNumbers(const std::vector<MatDens>& materials, double al_f
     return data;
 }
 
-void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data)
+void segmentBySpecter(std::shared_ptr<DataContainer> data, double al_filtration, double sn_filtration, double ag_filtration, double tube_kvp)
 {
-    if (!data)
-        return;
-    if (!data->hasImage(DataContainer::ImageType::CT))
-        return;
-    emit dataProcessingStarted(ProgressWorkType::Segmentating);
     std::vector<std::string> mat_names = { "Air, Dry (near sea level)", "Adipose Tissue (ICRP)", "Tissue, Soft (ICRP)", "Muscle, Skeletal", "Bone, Cortical (ICRP)" };
 
     std::vector<MatDens> materials;
@@ -129,7 +130,7 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
     // Density for bone is to high
     materials.back().second = 1.09;
 
-    const auto mat_data = getMeanCTNumbers(materials, m_Al_filt_mm, m_Sn_filt_mm, m_Ag_filt_mm, m_kv);
+    const auto mat_data = getMeanCTNumbers(materials, al_filtration, sn_filtration, ag_filtration, tube_kvp);
     const auto& mat_HU = mat_data.HU;
     std::vector<double> mat_HU_sep;
     for (std::size_t i = 0; i < mat_HU.size() - 1; ++i) {
@@ -157,6 +158,7 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
         const auto dens = (((w_att * w_dens - a_att * a_dens) * hu / 1000) + w_att * w_dens) / m_att;
         return std::max(dens, 0.0);
     });
+
     data->setImageArray(DataContainer::ImageType::Material, std::move(mat_array));
     data->setImageArray(DataContainer::ImageType::Density, std::move(dens_array));
 
@@ -166,6 +168,46 @@ void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data
         cont_materials[i].Z = NISTMaterials::Composition(mat_names[i]);
     }
     data->setMaterials(cont_materials);
+}
+
+void segmentByShcneider(std::shared_ptr<DataContainer> data)
+{
+    auto dens = xraymc::AAVoxelGrid<MAX_MATERIAL_ELEMENTS, 0, 255>::shcneiderMaterialDensities(data->getCTArray());
+    auto matIdx = xraymc::AAVoxelGrid<MAX_MATERIAL_ELEMENTS, 0, 255>::shcneiderMaterialIndices(data->getCTArray());
+    auto materialNames = xraymc::AAVoxelGrid<MAX_MATERIAL_ELEMENTS, 0, 255>::shcneiderMaterialNames();
+    auto materialWeights = xraymc::AAVoxelGrid<MAX_MATERIAL_ELEMENTS, 0, 255>::shcneiderMaterialWeights();
+
+    std::vector<MatDens> materials;
+    materials.reserve(materialNames.size());
+    for (int i = 0; i < materialNames.size(); ++i) {
+        const auto& name = materialNames[i];
+        materials.push_back(std::make_pair(Material::byWeight(materialWeights[i]).value(), NISTMaterials::density(name)));
+    }
+
+    data->setImageArray(DataContainer::ImageType::Material, std::move(matIdx));
+    data->setImageArray(DataContainer::ImageType::Density, std::move(dens));
+
+    std::vector<DataContainer::Material> cont_materials(materials.size());
+    for (int i = 0; i < materialNames.size(); ++i) {
+        cont_materials[i].name = materialNames[i];
+        cont_materials[i].Z = materialWeights[i];
+    }
+    data->setMaterials(cont_materials);
+}
+
+void CTSegmentationPipeline::updateImageData(std::shared_ptr<DataContainer> data)
+{
+    if (!data)
+        return;
+    if (!data->hasImage(DataContainer::ImageType::CT))
+        return;
+    emit dataProcessingStarted(ProgressWorkType::Segmentating);
+
+    if (m_useSchneider) {
+        segmentByShcneider(data);
+    } else {
+        segmentBySpecter(data, m_Al_filt_mm, m_Sn_filt_mm, m_Ag_filt_mm, m_kv);
+    }
 
     emit dataProcessingFinished(ProgressWorkType::Segmentating);
     emit imageDataChanged(data);

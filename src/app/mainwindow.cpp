@@ -116,6 +116,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionSnFiltrationChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setSnFiltration);
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionAgFiltrationChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setAgFiltration);
     connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionVoltageChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setAqusitionVoltage);
+    connect(ctdicomimportwidget, &CTDicomImportWidget::aqusitionUseSchneiderChanged, ctsegmentationpipeline, &CTSegmentationPipeline::setUseSchneider);
     connect(ctsegmentationpipeline, &CTSegmentationPipeline::imageDataChanged, slicerender, &RenderWidgetsCollection::updateImageData);
     connect(ctimageimportpipeline, &CTImageImportPipeline::imageDataChanged, ctsegmentationpipeline, &CTSegmentationPipeline::updateImageData);
 

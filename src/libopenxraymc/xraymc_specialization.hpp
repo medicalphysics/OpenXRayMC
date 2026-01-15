@@ -34,7 +34,8 @@ Copyright 2023 Erlend Andersen
 
 // Here we specialize types from the xraymc template library.
 
-using Material = xraymc::Material<5>;
+constexpr std::size_t MAX_MATERIAL_ELEMENTS = 12;
+using Material = xraymc::Material<MAX_MATERIAL_ELEMENTS>;
 using Tube = xraymc::Tube;
 using NISTMaterials = xraymc::NISTMaterials;
 

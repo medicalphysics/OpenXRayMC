@@ -184,6 +184,15 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
     // tube settings
     constexpr auto tubeAlignment = Qt::Alignment();
     auto tubeBox = new QGroupBox(tr("Aqusition tube settings: "), this);
+    tubeBox->setCheckable(true);
+    tubeBox->setChecked(true);
+    connect(tubeBox, &QGroupBox::toggled, [this, tubeBox](bool val) {
+        emit aqusitionUseSchneiderChanged(!val);
+        if (!val)
+            tubeBox->setTitle(tr("Using Schneider et al. material decomposition"));
+        else
+            tubeBox->setTitle(tr("Using five material decomposition"));
+    });
     auto tubeLayout = new QGridLayout;
     auto tubeVoltageLayout = new QVBoxLayout;
     auto tubeVoltageSpinBox = new QDoubleSpinBox(this);
@@ -286,6 +295,7 @@ CTDicomImportWidget::CTDicomImportWidget(QWidget* parent)
         emit aqusitionAlFiltrationChanged(tubeAlFiltrationSpinBox->value());
         emit aqusitionSnFiltrationChanged(tubeSnFiltrationSpinBox->value());
         emit aqusitionVoltageChanged(tubeVoltageSpinBox->value());
+        tubeBox->setChecked(false);
     });
 }
 

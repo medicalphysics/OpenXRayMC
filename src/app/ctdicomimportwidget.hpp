@@ -48,6 +48,7 @@ signals:
     void aqusitionAlFiltrationChanged(double mm);
     void aqusitionSnFiltrationChanged(double mm);
     void aqusitionAgFiltrationChanged(double mm);
+    void aqusitionUseSchneiderChanged(bool use);
     void segmentationMaterialsChanged();
     void requestCancelSegmentation();
     void useImageThresholdChanged(bool use);

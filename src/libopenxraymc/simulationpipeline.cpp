@@ -17,8 +17,8 @@ Copyright 2023 Erlend Andersen
 */
 
 #include <beamactorcontainer.hpp>
-#include <xraymc_specialization.hpp>
 #include <simulationpipeline.hpp>
+#include <xraymc_specialization.hpp>
 
 #include <xraymc/transport.hpp>
 #include <xraymc/world/world.hpp>
@@ -124,7 +124,7 @@ void SimulationPipeline::timerEvent(QTimerEvent* event)
 template <int CORRECTION = 1>
 void worker(bool deleteAirDose, int nthreads, std::shared_ptr<DataContainer> data, std::vector<std::shared_ptr<Beam>> beams, xraymc::TransportProgress* progress)
 {
-    using VoxelGrid = xraymc::AAVoxelGrid<5, CORRECTION, 255>;
+    using VoxelGrid = xraymc::AAVoxelGrid<MAX_MATERIAL_ELEMENTS, CORRECTION, 255>;
     using World = xraymc::World<VoxelGrid>;
 
     World world;
