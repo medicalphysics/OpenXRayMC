@@ -66,7 +66,7 @@ private:
     QComboBox* m_seriesSelector;
     QProgressBar* m_progressBar = nullptr;
     QPushButton* m_cancelSegmentationButton = nullptr;
-    std::array<double, 3> m_outputSpacing = { 2, 2, 2 };
+    std::array<double, 3> m_outputSpacing = { 1.5, 1.5, 1.5 };
     const std::array<double, 3> m_outputSpacingSegmentator = { 1.5, 1.5, 1.5 };
     std::array<double, 3> m_blurRadius = { 1, 1, 0 };
     bool m_useOutputSpacing = false;
