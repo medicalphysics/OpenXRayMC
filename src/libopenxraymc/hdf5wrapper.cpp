@@ -96,6 +96,11 @@ std::unique_ptr<H5::Group> getGroup(std::unique_ptr<H5::H5File>& file, const std
     return getGroup(file, names, create);
 }
 
+std::unique_ptr<H5::Group> getGroup(std::unique_ptr<H5::H5File>& file)
+{
+    return std::make_unique<H5::Group>(file->openGroup("/"));
+}
+
 template <typename T, std::size_t N>
     requires(std::is_integral_v<T> || std::is_floating_point_v<T>)
 bool saveArray(std::unique_ptr<H5::H5File>& file, const std::vector<std::string>& names, std::span<const T> v, const std::array<std::size_t, N>& dims, bool compress = true)
@@ -253,12 +258,15 @@ bool saveArray(std::unique_ptr<H5::H5File>& file, const std::string& path, const
 
 template <typename T>
     requires(std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_same_v<T, std::string>)
-std::vector<T> loadArray(std::unique_ptr<H5::H5File>& file, const std::string& path)
+std::vector<T> loadArray(std::unique_ptr<H5::H5File>& fileHandle, const std::string& path)
 {
-    std::vector<T> res;
-    if (file->nameExists(path)) {
 
-        H5::DataSet dataset = file->openDataSet(path.c_str());
+    auto root = getGroup(fileHandle);
+
+    std::vector<T> res;
+    bool exists = root->nameExists(path.c_str());
+    if (exists) {
+        H5::DataSet dataset = root->openDataSet(path.c_str());
         H5::DataSpace space = dataset.getSpace();
         int rank = space.getSimpleExtentNdims();
         std::vector<hsize_t> dims(rank);
@@ -1100,7 +1108,6 @@ bool HDF5Wrapper::save(std::shared_ptr<BeamActorContainer> beam)
 std::shared_ptr<DataContainer> HDF5Wrapper::load()
 {
     auto res = std::make_shared<DataContainer>();
-    std::string name;
     {
         auto v = loadArray<std::size_t>(m_file, "dimensions");
         if (v.size() == 3) {
@@ -1186,7 +1193,7 @@ std::vector<std::shared_ptr<BeamActorContainer>> HDF5Wrapper::loadBeams()
     if (!beamgroup)
         return res;
 
-    const std::array<std::string, 5> beamnames = { "DXBeams", "CTSpiralBeams", "CTDualEnergySpiralBeams", "CBCTBeams", "CTSequentialBeams" };
+    const std::array<std::string, 5> beamnames = { "DXBeams", "CTSpiralBeams", "CTSpiralDualEnergyBeams", "CBCTBeams", "CTSequentialBeams" };
 
     for (int i = 0; i < beamnames.size(); ++i) {
         const auto& beamname = beamnames[i];

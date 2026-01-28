@@ -1403,7 +1403,7 @@ void BeamSettingsModel::addCTSpiralDualEnergyBeam(std::shared_ptr<BeamActorConta
     if (actor) {
         beam = actor->getBeam();
         if (beam)
-            if (!std::holds_alternative<CTSpiralBeam>(*beam))
+            if (!std::holds_alternative<CTSpiralDualEnergyBeam>(*beam))
                 beam = nullptr;
     }
 
