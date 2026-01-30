@@ -1177,7 +1177,7 @@ std::shared_ptr<DataContainer> HDF5Wrapper::load()
     {
         auto start = loadArray<double>(m_file, "aecstart");
         auto stop = loadArray<double>(m_file, "aecstop");
-        auto weights = loadArray<double>(m_file, "weights");
+        auto weights = loadArray<double>(m_file, "aecweights");
         if (start.size() == 3 && stop.size() == 3 && weights.size() > 2) {
             res->setAecData({ start[0], start[1], start[2] }, { stop[0], stop[1], stop[2] }, weights);
         }
