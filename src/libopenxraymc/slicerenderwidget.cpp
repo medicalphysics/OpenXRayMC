@@ -53,9 +53,9 @@ constexpr std::array<double, 3> TEXT_COLOR = { 0.6, 0.5, 0.1 };
 vtkSmartPointer<vtkImageData> generateSampleData()
 {
     auto data = std::make_shared<DataContainer>();
-    data->setDimensions({ 8, 8, 8 });
+    data->setDimensions({ 2, 2, 2 });
     data->setSpacing({ 1, 1, 1 });
-    std::vector<double> im(8 * 8 * 8, 0);
+    std::vector<double> im(2 * 2 * 2);
 
     data->setImageArray(DataContainer::ImageType::CT, im);
     auto image = data->vtkImage(DataContainer::ImageType::CT);

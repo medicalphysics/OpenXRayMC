@@ -24,6 +24,7 @@ Copyright 2024 Erlend Andersen
 #include <QSettings>
 #include <QSplitter>
 #include <QTabWidget>
+#include <QTimer>
 
 #include <beamsettingswidget.hpp>
 #include <ctdicomimportwidget.hpp>
@@ -239,6 +240,11 @@ MainWindow::MainWindow(QWidget* parent)
 
     // no connections to pipeline after this point
     m_workerThread.start();
+
+    // Setting opening data
+    QTimer::singleShot(1, [=]() {
+        otherphantompipeline->importPhantom(1, 1.0, 1.0, 1.0, 20, 20, 20);
+    });
 }
 
 MainWindow::~MainWindow()
