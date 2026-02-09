@@ -45,7 +45,8 @@ find_package(VTK REQUIRED COMPONENTS
      InteractionStyle
      ImagingGeneral
      ImagingStatistics
-     IOExodus    
+     IOExodus
+     IOXML
      jsoncpp
      RenderingAnnotation
      RenderingContextOpenGL2
@@ -55,7 +56,7 @@ find_package(VTK REQUIRED COMPONENTS
      RenderingImage
      RenderingOpenGL2
      RenderingVolume
-     RenderingVolumeOpenGL2            
+     RenderingVolumeOpenGL2
   )
 
 #include HDF5

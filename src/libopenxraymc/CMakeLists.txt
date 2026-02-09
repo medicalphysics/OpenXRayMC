@@ -51,13 +51,14 @@ target_link_libraries(libopenxraymc PUBLIC
 	VTK::RenderingImage
 	VTK::RenderingVolumeOpenGL2
 	VTK::ImagingStatistics
+	VTK::IOXML
 	VTK::IOExodus
 	VTK::jsoncpp
 	VTK::InteractionImage
 	VTK::InteractionStyle
 	VTK::ImagingGeneral
 	VTK::CommonColor
-	VTK::RenderingAnnotation
+	VTK::RenderingAnnotation	
 	PRIVATE	
 	${HDF5_LIBRARIES}
 	)

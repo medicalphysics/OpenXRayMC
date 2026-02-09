@@ -45,6 +45,7 @@ Copyright 2023 Erlend Andersen
 #include <vtkScalarBarActor.h>
 #include <vtkTextProperty.h>
 #include <vtkWindowToImageFilter.h>
+#include <vtkXMLImageDataWriter.h>
 
 #include <string>
 
@@ -158,6 +159,52 @@ SliceRenderWidget::SliceRenderWidget(int orientation, bool lowerLeftText, bool c
 
             if (data) {
                 QProgressDialog progress(tr("Exporting Nifti file"), "", 0, 2, this);
+                progress.setWindowModality(Qt::WindowModal);
+                progress.setCancelButtonText(nullptr);
+                progress.setMinimumDuration(0);
+                progress.setValue(0);
+                progress.setValue(1);
+                QFuture<void> future = QtConcurrent::run(writer, data, std_path, imagetype);
+                QCoreApplication::processEvents();
+                future.waitForFinished();
+                progress.setValue(2);
+            }
+        }
+    });
+
+    menu->addAction(QString(tr("Export volume (vti)")), [this]() {
+        QSettings settings(QSettings::NativeFormat, QSettings::UserScope, "OpenXRayMC", "app");
+        auto dirpath_str = settings.value("saveload/path", ".").toString();
+
+        const auto imagetype = this->lut_current_type;
+        const auto image_desc = DataContainer::getImageAsString(imagetype);
+
+        auto filename = QString::fromStdString(image_desc) + QString(".vti");
+        QDir dirpath(dirpath_str);
+        filename = dirpath.absoluteFilePath(filename);
+
+        filename = QFileDialog::getSaveFileName(this, tr("Save File"), filename, tr("Nifti (*.vti)"));
+
+        if (!filename.isEmpty()) {
+            auto fileinfo = QFileInfo(filename);
+            dirpath_str = fileinfo.absolutePath();
+            settings.setValue("saveload/path", dirpath_str);
+
+            auto std_path = filename.toStdString();
+            auto data = this->m_data; // copy of shared ptr
+
+            auto writer = [](std::shared_ptr<DataContainer> data, std::string path, DataContainer::ImageType type) {
+                auto vtkwriter = vtkSmartPointer<vtkXMLImageDataWriter>::New();
+                auto image = data->vtkImage(type);
+                if (image) {
+                    vtkwriter->SetFileName(path.c_str());
+                    vtkwriter->SetInputData(image);
+                    vtkwriter->Update();
+                }
+            };
+
+            if (data) {
+                QProgressDialog progress(tr("Exporting vti file"), "", 0, 2, this);
                 progress.setWindowModality(Qt::WindowModal);
                 progress.setCancelButtonText(nullptr);
                 progress.setMinimumDuration(0);
