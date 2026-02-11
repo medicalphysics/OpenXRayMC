@@ -382,7 +382,7 @@ void SliceRenderWidget::useFXAA(bool use)
 void SliceRenderWidget::setImageSmoothing(double pixels)
 {
     m_smoother->SetStandardDeviation(pixels);
-    m_smoother->SetRadiusFactor(std::max(1.0, pixels * 3));
+    m_smoother->SetRadiusFactor(std::max(2.0, pixels * 3));
     Render();
 }
 
