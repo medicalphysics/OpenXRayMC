@@ -3,6 +3,19 @@
     {
       "filterdata": [
         {
+          "angle": 0.0,
+          "weight": 1.0
+        },
+        {
+          "angle": 0.40,
+          "weight": 1.0
+        }
+      ],
+      "name": "None"
+    },
+    {
+      "filterdata": [
+        {
           "angle": 0.166511074,
           "weight": 3.53208
         },
