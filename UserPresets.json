@@ -9,7 +9,7 @@
       "cacheVariables": {
         "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
         "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6",
-        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.5.2"
+        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.6.0"
       }
     },
     {
@@ -20,7 +20,21 @@
       "cacheVariables": {
         "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
         "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6",
-        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.5.2"
+        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.6.0",
+        "OPENXRayMC_USECTSEGMENTATOR": true,
+        "Torch_DIR": "C:\\Users\\ander\\source\\torch\\2.8.0cpu\\libtorch\\share\\cmake\\Torch",
+        "CTSEGMENTATOR_MODELS_DIR": "C:/Users/ander/OneDrive/ctsegmentator"
+      }
+    },
+    {
+      "name": "x64-release-debug-user",
+      "displayName": "x64 Release Debug User",
+      "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
+      "inherits": "x64-releasedebug",
+      "cacheVariables": {
+        "XRAYMCLIB_EPICS_DATA_DIRPATH": "C:\\Users\\ander\\OneDrive\\EPICS",
+        "Qt6_DIR": "C:\\Qt\\6.10.1\\msvc2022_64\\lib\\cmake\\Qt6",
+        "VTK_DIR": "C:\\Users\\ander\\source\\vtk\\bin\\VTK-9.6.0"
       }
     }
   ]
