@@ -126,7 +126,7 @@ static std::vector<Organ> readOrgans(const std::string& path)
 
 struct Media {
     std::uint8_t ID = 0;
-    std::map<std::size_t, double> composition;
+    std::map<std::uint8_t, double> composition;
     std::string name;
 };
 
@@ -154,7 +154,7 @@ static std::optional<Media> parseMediaLine(const std::string& line)
         return std::nullopt;
 
     // atomic weights
-    constexpr std::array<std::size_t, 13> Zs = { 1, 6, 7, 8, 11, 12, 15, 16, 17, 19, 20, 26, 53 };
+    constexpr std::array<std::uint8_t, 13> Zs = { 1, 6, 7, 8, 11, 12, 15, 16, 17, 19, 20, 26, 53 };
     std::array<double, 13> Ws;
     for (std::size_t i = 0; i < Ws.size(); ++i) {
         while (std::isspace(*start) && start != end) {

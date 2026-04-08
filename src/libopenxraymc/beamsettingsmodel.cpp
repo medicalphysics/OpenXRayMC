@@ -479,7 +479,7 @@ void BeamSettingsModel::addDXBeam(std::shared_ptr<BeamActorContainer> actor)
                 beam = nullptr;
     }
     if (!beam) {
-        const std::map<std::size_t, double> filt_init = { { 13, 2.0 }, { 29, 0.1 } };
+        const std::map<std::uint8_t, double> filt_init = { { 13, 2.0 }, { 29, 0.1 } };
         beam = std::make_shared<Beam>(DXBeam(filt_init));
         // setting some nice defaults
         auto& dx = std::get<DXBeam>(*beam);

@@ -18,7 +18,7 @@ Copyright 2023 Erlend Andersen
 
 #include <xraymc_specialization.hpp>
 
-DXBeam::DXBeam(const std::map<std::size_t, double>& filtrationMaterials)
+DXBeam::DXBeam(const std::map<std::uint8_t, double>& filtrationMaterials)
     : xraymc::DXBeam<false>({ 0, 0, 0 }, { { { 1, 0, 0 }, { 0, -1, 0 } } }, filtrationMaterials)
 {
     updatePosition();

@@ -350,7 +350,7 @@ HMGUPhantom readHMGUheader(const std::vector<char>& data)
 
 struct Media {
     std::uint8_t ID = 0;
-    std::map<std::size_t, double> composition;
+    std::map<std::uint8_t, double> composition;
     std::string name;
 };
 

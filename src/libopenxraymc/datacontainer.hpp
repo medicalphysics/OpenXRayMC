@@ -45,7 +45,7 @@ public:
 
     struct Material {
         std::string name;
-        std::map<std::uint64_t, double> Z;
+        std::map<std::uint8_t, double> Z;
     };
 
     DataContainer();

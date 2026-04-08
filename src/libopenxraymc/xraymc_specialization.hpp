@@ -49,7 +49,7 @@ using PencilBeam = xraymc::PencilBeam<false>;
 
 class DXBeam : public xraymc::DXBeam<false> {
 public:
-    DXBeam(const std::map<std::size_t, double>& filtrationMaterials = {});
+    DXBeam(const std::map<std::uint8_t, double>& filtrationMaterials = {});
 
     const std::array<double, 3>& rotationCenter() const;
     void setRotationCenter(const std::array<double, 3>& c);
