@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(OpenXRayMC VERSION 1.2.6 DESCRIPTION "OpenXRayMC description" LANGUAGES CXX)
+project(OpenXRayMC VERSION 1.2.7 DESCRIPTION "OpenXRayMC description" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -72,7 +72,7 @@ include(FetchContent)
 FetchContent_Declare(
     libxraymc
     GIT_REPOSITORY https://github.com/medicalphysics/XRayMClib.git
-    GIT_TAG serializer
+    GIT_TAG master
     )
 FetchContent_MakeAvailable(libxraymc)
 
