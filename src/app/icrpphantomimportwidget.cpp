@@ -172,7 +172,7 @@ ICRPPhantomImportWidget::ICRPPhantomImportWidget(QWidget* parent)
         if (index == 0)
             return;
         auto pIdx = index - 1;
-        const auto& p = phantoms()[pIdx];
+        const auto p = phantoms()[pIdx];
         const auto& d = p.dimensions;
         const auto& s = p.spacing;
 
