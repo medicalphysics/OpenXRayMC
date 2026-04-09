@@ -22,5 +22,9 @@ OpenXRayMC is build with CMake and depends on the following libraries:
 * LibTorch: https://pytorch.org/get-started/locally/, version >= 2.3.1 for basic CT organ segmentation.
 
 These libraries must be installed. Running cmake with standard settings should suffice to generate makefiles for your platform. The application is currently only tested for Windows 11 and Linux, but should compile on Mac. Errors when building for Windows, Linux and Mac are considered bugs. 
+The default CMake configuration setting is not to download any data fom the internet, to automatic download photon attenuation data and optionally Torch models fro experimental CT organ segmentation please set:  
+-DXRAYMCLIB_EPICS_DOWNLOAD:BOOL="ON"   
+-DCTSEGMENTATOR_MODELS_DOWNLOAD:BOOL="ON"  
+when running the CMake configuration step.
 
 
